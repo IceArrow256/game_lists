@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:game_list/app_theme.dart';
 
 void main() {
   runApp(Home());
@@ -14,7 +15,10 @@ class _HomeState extends State<Home> {
 
   final tabs = [
     Center(
-      child: Text('Overview'),
+      child: Text('Home'),
+    ),
+    Center(
+      child: Text('Search'),
     ),
     Center(
       child: Text('Game List'),
@@ -22,7 +26,7 @@ class _HomeState extends State<Home> {
     Center(
       child: Image.network(
           'https://i.pinimg.com/originals/53/f9/8a/53f98a6b76f60356b2b4c261963377e6.jpg'),
-    )
+    ),
   ];
 
   @override
@@ -30,6 +34,7 @@ class _HomeState extends State<Home> {
     var title = 'Game List';
     return MaterialApp(
       title: title,
+      theme: AppTheme.lightTheme,
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
@@ -45,17 +50,15 @@ class _HomeState extends State<Home> {
           unselectedFontSize: 12,
           items: [
             BottomNavigationBarItem(
-                icon: Icon(Icons.search),
-                label: 'Overview',
-                backgroundColor: Colors.blue),
+              icon: Icon(Icons.home_outlined),
+              label: 'Home',
+            ),
             BottomNavigationBarItem(
-                icon: Icon(Icons.gamepad),
-                label: 'Game List',
-                backgroundColor: Colors.blue),
+                icon: Icon(Icons.search_outlined), label: 'Search'),
             BottomNavigationBarItem(
-                icon: Icon(Icons.person),
-                label: 'Profile',
-                backgroundColor: Colors.blue),
+                icon: Icon(Icons.games), label: 'Game List'),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.settings), label: 'Settings'),
           ],
           onTap: (index) {
             setState(() {
