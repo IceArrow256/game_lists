@@ -4,3 +4,5 @@
 - Own app bar.
 - CHANGELOG.md.
 - LICENSE.
+- Add bottom navigation bar.
+- Disable debug checke mode banner.
