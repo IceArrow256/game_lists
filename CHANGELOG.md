@@ -1,17 +1,22 @@
 ## [0.2.0] - 2020-01-21
 ### Added
+- Changing app bar by current tab.
 - Dark theme.
+- Folder for themes' files.
+- Settings tab.
+- Option for setting theme.
 
 ### Changed
-- All themes' font to Inter.
+- All fonts to Inter.
+- Divide theme file to dark and light.
 
 ## [0.1.0] - 2020-01-20
 ### Added
 - Basic app template.
-- Own app bar.
-- CHANGELOG.md.
-- LICENSE.
 - Bottom navigation bar.
-- Disabling debug checke mode banner.
+- CHANGELOG.md.
+- Disabling debug checker mode banner.
 - Inter font.
+- LICENSE.
 - Light app theme.
+- Own app bar.

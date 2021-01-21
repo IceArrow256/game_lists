@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:game_list/app_theme.dart';
+
+import 'package:game_list/themes/dark_theme.dart';
+import 'package:game_list/themes/light_theme.dart';
 
 void main() {
   runApp(Home());
@@ -12,35 +14,70 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int _currentIndex = 0;
+  bool _isDarkTheme;
 
-  final tabs = [
-    Center(
-      child: Text('Home'),
-    ),
-    Center(
-      child: Text('Search'),
-    ),
-    Center(
-      child: Text('Game List'),
-    ),
-    Center(
-      child: Image.network(
-          'https://i.pinimg.com/originals/53/f9/8a/53f98a6b76f60356b2b4c261963377e6.jpg'),
-    ),
+  final tabsTitle = [
+    'Game List',
+    'Search',
+    'Games',
+    'Settings',
   ];
 
   @override
+  void initState() {
+    _isDarkTheme = false;
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    var title = 'Game List';
+    final tabs = [
+      Center(
+        child: Text('Home'),
+      ),
+      Center(
+        child: Text('Search'),
+      ),
+      Center(
+        child: Text('Games'),
+      ),
+      ListView(
+        children: [
+          SizedBox(
+            height: 8,
+          ),
+          Card(
+            margin: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: [
+                  Text('Appearance'),
+                  SwitchListTile(
+                      title: Text('Dark Theme'),
+                      value: _isDarkTheme,
+                      onChanged: (value) {
+                        setState(() {
+                          _isDarkTheme = value;
+                        });
+                      })
+                ],
+              ),
+            ),
+          )
+        ],
+      ) // Settings tab
+    ];
+
     return MaterialApp(
-      title: title,
-      theme: AppTheme.darkTheme,
+      title: 'Game List',
+      theme: _isDarkTheme ? darkTheme : lightTheme,
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
-            title: Row(
-          children: [Icon(Icons.gamepad), SizedBox(width: 8), Text(title)],
-        )),
+          leading: Icon(Icons.gamepad),
+          title: Text(tabsTitle[_currentIndex]),
+        ),
         body: tabs[_currentIndex],
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: _currentIndex,
@@ -55,8 +92,7 @@ class _HomeState extends State<Home> {
             ),
             BottomNavigationBarItem(
                 icon: Icon(Icons.search_outlined), label: 'Search'),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.games), label: 'Game List'),
+            BottomNavigationBarItem(icon: Icon(Icons.games), label: 'Games'),
             BottomNavigationBarItem(
                 icon: Icon(Icons.settings), label: 'Settings'),
           ],
