@@ -1,3 +1,10 @@
+## [0.2.0] - 2020-01-21
+### Added
+- Dark theme.
+
+### Changed
+- All themes' font to Inter.
+
 ## [0.1.0] - 2020-01-20
 ### Added
 - Basic app template.

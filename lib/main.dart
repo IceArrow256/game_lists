@@ -34,7 +34,7 @@ class _HomeState extends State<Home> {
     var title = 'Game List';
     return MaterialApp(
       title: title,
-      theme: AppTheme.lightTheme,
+      theme: AppTheme.darkTheme,
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
