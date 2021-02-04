@@ -1,5 +1,6 @@
 ## [0.3.0] - 2020-02-04
 ### Added
+- Saving theme status after reload.
 
 ### Changed
 - Tabs widget to tabs folder.

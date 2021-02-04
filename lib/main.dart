@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:game_list/themes/dark_theme.dart';
 import 'package:game_list/themes/light_theme.dart';
 
@@ -25,16 +27,27 @@ class _HomeState extends State<Home> {
     'Settings',
   ];
 
-  _updateIsDarkTheme(bool value) {
+  _applyTheme() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final bool isDarkTheme = (prefs.getBool('isDarkTheme') ?? _isDarkTheme);
+    setState(() {
+      _isDarkTheme = isDarkTheme;
+    });
+  }
+
+  _updateIsDarkTheme(bool value) async {
     setState(() {
       _isDarkTheme = value;
     });
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final bool isDarkTheme = await prefs.setBool('isDarkTheme', _isDarkTheme);
   }
 
   @override
   void initState() {
-    _isDarkTheme = false;
     super.initState();
+    _isDarkTheme = false;
+    _applyTheme();
   }
 
   @override
