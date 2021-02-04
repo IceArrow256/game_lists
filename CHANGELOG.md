@@ -1,3 +1,9 @@
+## [0.3.0] - 2020-02-04
+### Added
+
+### Changed
+- Tabs widget to tabs folder.
+
 ## [0.2.0] - 2020-01-21
 ### Added
 - Changing app bar by current tab.

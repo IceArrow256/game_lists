@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:game_list/themes/dark_theme.dart';
 import 'package:game_list/themes/light_theme.dart';
 
+import 'package:game_list/tabs/tabs.dart';
+
 void main() {
   runApp(Home());
 }
@@ -23,6 +25,12 @@ class _HomeState extends State<Home> {
     'Settings',
   ];
 
+  _updateIsDarkTheme(bool value) {
+    setState(() {
+      _isDarkTheme = value;
+    });
+  }
+
   @override
   void initState() {
     _isDarkTheme = false;
@@ -32,41 +40,12 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     final tabs = [
-      Center(
-        child: Text('Home'),
-      ),
-      Center(
-        child: Text('Search'),
-      ),
-      Center(
-        child: Text('Games'),
-      ),
-      ListView(
-        children: [
-          SizedBox(
-            height: 8,
-          ),
-          Card(
-            margin: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: [
-                  Text('Appearance'),
-                  SwitchListTile(
-                      title: Text('Dark Theme'),
-                      value: _isDarkTheme,
-                      onChanged: (value) {
-                        setState(() {
-                          _isDarkTheme = value;
-                        });
-                      })
-                ],
-              ),
-            ),
-          )
-        ],
-      ) // Settings tab
+      HomeTab(),
+      SearchTab(),
+      GamesTab(),
+      SettingsTab(
+          isDarkTheme: _isDarkTheme,
+          updateIsDarkTheme: _updateIsDarkTheme) // Settings tab
     ];
 
     return MaterialApp(
