@@ -2,6 +2,8 @@
 ### Added
 - Connecting to database.
 - Testing connect to database.
+- Game entity.
+- Simple Game entities viewer on games tab.
 
 ## [0.3.0] - 2020-02-04
 ### Added

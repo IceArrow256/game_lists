@@ -60,12 +60,12 @@ class _$AppDatabase extends AppDatabase {
     changeListener = listener ?? StreamController<String>.broadcast();
   }
 
-  PersonDao _personDaoInstance;
+  GameDao _gameDaoInstance;
 
   Future<sqflite.Database> open(String path, List<Migration> migrations,
       [Callback callback]) async {
     final databaseOptions = sqflite.OpenDatabaseOptions(
-      version: 1,
+      version: 2,
       onConfigure: (database) async {
         await database.execute('PRAGMA foreign_keys = ON');
       },
@@ -80,7 +80,7 @@ class _$AppDatabase extends AppDatabase {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `Person` (`id` INTEGER, `name` TEXT, PRIMARY KEY (`id`))');
+            'CREATE TABLE IF NOT EXISTS `Game` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT NOT NULL, `cover_url` TEXT)');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -89,19 +89,32 @@ class _$AppDatabase extends AppDatabase {
   }
 
   @override
-  PersonDao get personDao {
-    return _personDaoInstance ??= _$PersonDao(database, changeListener);
+  GameDao get gameDao {
+    return _gameDaoInstance ??= _$GameDao(database, changeListener);
   }
 }
 
-class _$PersonDao extends PersonDao {
-  _$PersonDao(this.database, this.changeListener)
+class _$GameDao extends GameDao {
+  _$GameDao(this.database, this.changeListener)
       : _queryAdapter = QueryAdapter(database, changeListener),
-        _personInsertionAdapter = InsertionAdapter(
+        _gameInsertionAdapter = InsertionAdapter(
             database,
-            'Person',
-            (Person item) =>
-                <String, dynamic>{'id': item.id, 'name': item.name},
+            'Game',
+            (Game item) => <String, dynamic>{
+                  'id': item.id,
+                  'name': item.name,
+                  'cover_url': item.coverUrl
+                },
+            changeListener),
+        _gameUpdateAdapter = UpdateAdapter(
+            database,
+            'Game',
+            ['id'],
+            (Game item) => <String, dynamic>{
+                  'id': item.id,
+                  'name': item.name,
+                  'cover_url': item.coverUrl
+                },
             changeListener);
 
   final sqflite.DatabaseExecutor database;
@@ -110,27 +123,34 @@ class _$PersonDao extends PersonDao {
 
   final QueryAdapter _queryAdapter;
 
-  final InsertionAdapter<Person> _personInsertionAdapter;
+  final InsertionAdapter<Game> _gameInsertionAdapter;
+
+  final UpdateAdapter<Game> _gameUpdateAdapter;
 
   @override
-  Future<List<Person>> findAllPersons() async {
-    return _queryAdapter.queryList('SELECT * FROM Person',
-        mapper: (Map<String, dynamic> row) =>
-            Person(row['id'] as int, row['name'] as String));
+  Future<List<Game>> findAllGame() async {
+    return _queryAdapter.queryList('SELECT * FROM Game',
+        mapper: (Map<String, dynamic> row) => Game(row['id'] as int,
+            row['name'] as String, row['cover_url'] as String));
   }
 
   @override
-  Stream<Person> findPersonById(int id) {
-    return _queryAdapter.queryStream('SELECT * FROM Person WHERE id = ?',
+  Stream<Game> findGameById(int id) {
+    return _queryAdapter.queryStream('SELECT * FROM Game WHERE id = ?',
         arguments: <dynamic>[id],
-        queryableName: 'Person',
+        queryableName: 'Game',
         isView: false,
-        mapper: (Map<String, dynamic> row) =>
-            Person(row['id'] as int, row['name'] as String));
+        mapper: (Map<String, dynamic> row) => Game(row['id'] as int,
+            row['name'] as String, row['cover_url'] as String));
   }
 
   @override
-  Future<void> insertPerson(Person person) async {
-    await _personInsertionAdapter.insert(person, OnConflictStrategy.abort);
+  Future<void> insertGame(Game game) async {
+    await _gameInsertionAdapter.insert(game, OnConflictStrategy.abort);
+  }
+
+  @override
+  Future<void> updateGame(Game game) async {
+    await _gameUpdateAdapter.update(game, OnConflictStrategy.replace);
   }
 }
