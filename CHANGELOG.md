@@ -1,3 +1,8 @@
+## [0.4.0] - 2020-02-05
+### Added
+- Connecting to database.
+- Testing connect to database.
+
 ## [0.3.0] - 2020-02-04
 ### Added
 - Saving theme status after reload.
