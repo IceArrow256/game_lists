@@ -1,3 +1,7 @@
+## [0.5.0] - 2020-02-07
+### Changed
+- Move home page to pages folder.
+
 ## [0.4.0] - 2020-02-05
 ### Added
 - Connecting to database.
