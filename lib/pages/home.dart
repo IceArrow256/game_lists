@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:game_list/pages/game/game_add.dart';
 import 'package:game_list/pages/tabs/tabs.dart';
 
 class Home extends StatefulWidget {
@@ -62,6 +63,15 @@ class _HomeState extends State<Home> {
         selectedFontSize: 12,
         type: BottomNavigationBarType.fixed,
         unselectedFontSize: 12,
+      ),
+      floatingActionButton: Visibility(
+        visible: _currentIndex == 1,
+        child: FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: () {
+            Navigator.pushNamed(context, GameAdd.routeName);
+          },
+        ),
       ),
     );
   }

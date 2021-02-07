@@ -14,6 +14,8 @@ class GameView extends StatelessWidget {
           overflow: TextOverflow.fade,
         ),
       ),
+      floatingActionButton:
+          FloatingActionButton(child: Icon(Icons.add), onPressed: () {}),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Row(

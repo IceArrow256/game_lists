@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:game_list/pages/game/game_view.dart';
+import 'package:game_list/pages/game/game_add.dart';
 import 'package:game_list/pages/home.dart';
 import 'package:game_list/themes/dark_theme.dart';
 import 'package:game_list/themes/light_theme.dart';
@@ -27,6 +28,7 @@ class _AppState extends State<App> {
         Home.routeName: (context) =>
             Home(isDarkTheme: _isDarkTheme, updateTheme: _updateTheme),
         GameView.routeName: (context) => GameView(),
+        GameAdd.routeName: (context) => GameAdd(),
       },
     );
   }

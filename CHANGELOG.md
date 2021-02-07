@@ -1,3 +1,11 @@
+## [0.6.0] - 2020-02-08
+### Added
+- Add float action button for search tab and game view page.
+- Add add game page.
+
+### Changed
+- Swap search and games tab.
+
 ## [0.5.0] - 2020-02-07
 ### Added
 - Bold style for main font.
