@@ -1,6 +1,13 @@
 ## [0.5.0] - 2020-02-07
+### Added
+- Bold style for main font.
+- Game view page.
+- Basic refactoring.
+
 ### Changed
-- Move home page to pages folder.
+- Separate app code from page's code.
+- Move home page to pages' folder.
+- Move tabs to pages' folder.
 
 ## [0.4.0] - 2020-02-05
 ### Added

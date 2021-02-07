@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
-
-import 'package:shared_preferences/shared_preferences.dart';
-
-import 'package:game_list/themes/dark_theme.dart';
-import 'package:game_list/themes/light_theme.dart';
-
-import 'package:game_list/tabs/tabs.dart';
+import 'package:game_list/pages/tabs/tabs.dart';
 
 class Home extends StatefulWidget {
+  static const routeName = '/';
+
+  final ValueChanged<bool> updateTheme;
+  final bool isDarkTheme;
+
   @override
+  const Home({Key key, @required this.isDarkTheme, @required this.updateTheme})
+      : super(key: key);
+
   _HomeState createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
-  int _currentIndex = 0;
-  bool _isDarkTheme;
+  int _currentIndex;
 
   final tabsTitle = [
     'Game List',
@@ -23,29 +24,6 @@ class _HomeState extends State<Home> {
     'Settings',
   ];
 
-  _applyTheme() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final bool isDarkTheme = (prefs.getBool('isDarkTheme') ?? _isDarkTheme);
-    setState(() {
-      _isDarkTheme = isDarkTheme;
-    });
-  }
-
-  _updateIsDarkTheme(bool value) async {
-    setState(() {
-      _isDarkTheme = value;
-    });
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final bool isDarkTheme = await prefs.setBool('isDarkTheme', _isDarkTheme);
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _isDarkTheme = false;
-    _applyTheme();
-  }
-
   @override
   Widget build(BuildContext context) {
     final tabs = [
@@ -53,44 +31,44 @@ class _HomeState extends State<Home> {
       SearchTab(),
       GamesTab(),
       SettingsTab(
-          isDarkTheme: _isDarkTheme,
-          updateIsDarkTheme: _updateIsDarkTheme) // Settings tab
+          isDarkTheme: widget.isDarkTheme,
+          updateIsDarkTheme: widget.updateTheme) // Settings tab
     ];
-
-    return MaterialApp(
-      title: 'Game List',
-      theme: _isDarkTheme ? darkTheme : lightTheme,
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        appBar: AppBar(
-          leading: Icon(Icons.gamepad),
-          title: Text(tabsTitle[_currentIndex]),
-        ),
-        body: tabs[_currentIndex],
-        bottomNavigationBar: BottomNavigationBar(
-          currentIndex: _currentIndex,
-          type: BottomNavigationBarType.fixed,
-          iconSize: 32,
-          selectedFontSize: 12,
-          unselectedFontSize: 12,
-          items: [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home_outlined),
-              label: 'Home',
-            ),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.search_outlined), label: 'Search'),
-            BottomNavigationBarItem(icon: Icon(Icons.games), label: 'Games'),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.settings), label: 'Settings'),
-          ],
-          onTap: (index) {
-            setState(() {
-              _currentIndex = index;
-            });
-          },
-        ),
+    return Scaffold(
+      appBar: AppBar(
+        leading: Icon(Icons.gamepad),
+        title: Text(tabsTitle[_currentIndex]),
+      ),
+      body: tabs[_currentIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _currentIndex,
+        iconSize: 32,
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home_outlined),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.search_outlined), label: 'Search'),
+          BottomNavigationBarItem(icon: Icon(Icons.games), label: 'Games'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.settings), label: 'Settings'),
+        ],
+        onTap: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
+        selectedFontSize: 12,
+        type: BottomNavigationBarType.fixed,
+        unselectedFontSize: 12,
       ),
     );
+  }
+
+  @override
+  void initState() {
+    _currentIndex = 0;
+    super.initState();
   }
 }

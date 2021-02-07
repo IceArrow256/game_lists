@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 
 class SettingsTab extends StatelessWidget {
+  final bool isDarkTheme;
+  final ValueChanged<bool> updateIsDarkTheme;
+
   const SettingsTab(
       {Key key, @required this.isDarkTheme, @required this.updateIsDarkTheme})
       : super(key: key);
-
-  final bool isDarkTheme;
-  final ValueChanged<bool> updateIsDarkTheme;
 
   @override
   Widget build(BuildContext context) {
     return ListView(
       children: [
         SizedBox(
-          height: 8,
+          height: 4,
         ),
         Card(
           margin: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
