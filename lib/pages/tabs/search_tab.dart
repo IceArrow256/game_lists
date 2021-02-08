@@ -37,9 +37,10 @@ class _SearchTabState extends State<SearchTab> {
                         snapshot.data[index - 1].coverUrl,
                       ).image,
                     ),
-                    onTap: () {
-                      Navigator.pushNamed(context, GameView.routeName,
+                    onTap: () async {
+                      await Navigator.pushNamed(context, GameView.routeName,
                           arguments: snapshot.data[index - 1]);
+                      setState(() {});
                     },
                     isThreeLine: true,
                   ),

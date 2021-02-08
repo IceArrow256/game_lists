@@ -1,7 +1,10 @@
 ## [0.6.0] - 2020-02-08
 ### Added
-- Add float action button for search tab and game view page.
-- Add add game page.
+- Float action button for search tab and game view page.
+- Game view page.
+- Game add page.
+- Game edit page.
+- Updating parents page when child change data.
 
 ### Changed
 - Swap search and games tab.

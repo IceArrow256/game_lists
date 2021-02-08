@@ -68,8 +68,9 @@ class _HomeState extends State<Home> {
         visible: _currentIndex == 1,
         child: FloatingActionButton(
           child: Icon(Icons.add),
-          onPressed: () {
-            Navigator.pushNamed(context, GameAdd.routeName);
+          onPressed: () async {
+            await Navigator.pushNamed(context, GameAdd.routeName);
+            setState(() {});
           },
         ),
       ),

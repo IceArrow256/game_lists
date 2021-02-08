@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:game_list/db/database.dart';
 import 'package:game_list/db/model/game.dart';
 
-class GameAdd extends StatefulWidget {
-  static const routeName = '/gameAdd';
+class GameEdit extends StatefulWidget {
+  static const routeName = '/gameEdit';
 
   @override
-  _GameAddState createState() => _GameAddState();
+  _GameEditState createState() => _GameEditState();
 }
 
-class _GameAddState extends State<GameAdd> {
+class _GameEditState extends State<GameEdit> {
   final _formKey = GlobalKey<FormState>();
+  Game _game;
   String _name;
   String _coverUrl;
 
@@ -20,17 +21,28 @@ class _GameAddState extends State<GameAdd> {
 
   @override
   Widget build(BuildContext context) {
+    _game = ModalRoute.of(context).settings.arguments;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add game'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.delete),
+            onPressed: () async {
+              _deleteGame(_game);
+              Navigator.pop(context, 'delete');
+            },
+          ),
+        ],
+        title: Text('Edit game'),
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.check),
         onPressed: () {
           if (_formKey.currentState.validate()) {
             _formKey.currentState.save();
-            _createGame();
-            Navigator.pop(context);
+            var game = Game(_game.id, _name, _coverUrl);
+            _updateGame(game);
+            Navigator.pop(context, game);
           }
         },
       ),
@@ -41,6 +53,7 @@ class _GameAddState extends State<GameAdd> {
               child: Column(
                 children: [
                   TextFormField(
+                    initialValue: _game.name,
                     decoration: InputDecoration(labelText: 'Name'),
                     validator: (value) {
                       if (value.isEmpty) {
@@ -53,6 +66,7 @@ class _GameAddState extends State<GameAdd> {
                     },
                   ),
                   TextFormField(
+                    initialValue: _game.coverUrl,
                     decoration: InputDecoration(labelText: 'Cover URL'),
                     validator: (value) {
                       if (value.isEmpty) {
@@ -69,9 +83,18 @@ class _GameAddState extends State<GameAdd> {
     );
   }
 
-  void _createGame() async {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  void _deleteGame(Game game) async {
     final database = await _database;
-    var game = Game(null, _name, _coverUrl);
-    database.gameDao.insertGame(game);
+    database.gameDao.deleteGame(game);
+  }
+
+  void _updateGame(Game game) async {
+    final database = await _database;
+    database.gameDao.updateGame(game);
   }
 }

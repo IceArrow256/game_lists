@@ -15,4 +15,10 @@ abstract class GameDao {
 
   @Update(onConflict: OnConflictStrategy.replace)
   Future<void> updateGame(Game game);
+
+  @delete
+  Future<void> deleteGame(Game game);
+
+  @delete
+  Future<int> deleteGames(List<Game> games);
 }

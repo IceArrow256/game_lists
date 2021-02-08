@@ -115,6 +115,16 @@ class _$GameDao extends GameDao {
                   'name': item.name,
                   'cover_url': item.coverUrl
                 },
+            changeListener),
+        _gameDeletionAdapter = DeletionAdapter(
+            database,
+            'Game',
+            ['id'],
+            (Game item) => <String, dynamic>{
+                  'id': item.id,
+                  'name': item.name,
+                  'cover_url': item.coverUrl
+                },
             changeListener);
 
   final sqflite.DatabaseExecutor database;
@@ -126,6 +136,8 @@ class _$GameDao extends GameDao {
   final InsertionAdapter<Game> _gameInsertionAdapter;
 
   final UpdateAdapter<Game> _gameUpdateAdapter;
+
+  final DeletionAdapter<Game> _gameDeletionAdapter;
 
   @override
   Future<List<Game>> findAllGame() async {
@@ -152,5 +164,15 @@ class _$GameDao extends GameDao {
   @override
   Future<void> updateGame(Game game) async {
     await _gameUpdateAdapter.update(game, OnConflictStrategy.replace);
+  }
+
+  @override
+  Future<void> deleteGame(Game game) async {
+    await _gameDeletionAdapter.delete(game);
+  }
+
+  @override
+  Future<int> deleteGames(List<Game> games) {
+    return _gameDeletionAdapter.deleteListAndReturnChangedRows(games);
   }
 }
