@@ -1,9 +1,13 @@
 ## [0.7.0] - 2020-02-09
 ### Added
 - New dark and light theme.
+- Start develop searching function.
 
 ### Fixed
 - Status icon color for light theme.
+
+### Changed
+- New card for games in search tab.
 
 ## [0.6.0] - 2020-02-08
 ### Added

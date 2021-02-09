@@ -49,10 +49,12 @@ class _GameViewState extends State<GameView> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ClipRRect(
-              borderRadius: BorderRadius.circular(4),
+              borderRadius: BorderRadius.circular(2.0),
               child: Image.network(
                 game.coverUrl,
                 width: 128,
+                height: 171,
+                fit: BoxFit.fill,
               ),
             ),
             Flexible(

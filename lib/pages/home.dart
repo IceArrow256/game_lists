@@ -17,7 +17,8 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int _currentIndex;
-  bool _isSearching = false;
+  bool _isSearching;
+  String _search;
 
   final tabsTitle = [
     'Game List',
@@ -30,7 +31,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     final tabs = [
       HomeTab(),
-      SearchTab(),
+      SearchTab(search: _search),
       GamesTab(),
       SettingsTab(
           isDarkTheme: widget.isDarkTheme,
@@ -39,16 +40,23 @@ class _HomeState extends State<Home> {
     return Scaffold(
       appBar: AppBar(
         leading: Icon(Icons.gamepad),
-        title: !_isSearching
-            ? Text(tabsTitle[_currentIndex])
-            : TextField(
-                decoration: InputDecoration(hintText: 'Search'),
-              ),
+        title: (_isSearching && _currentIndex == 1)
+            ? TextField(
+                autofocus: true,
+                onChanged: (value) {
+                  setState(() {
+                    _search = value;
+                  });
+                },
+                decoration: InputDecoration(
+                    hintText: 'Search', icon: Icon(Icons.search)),
+              )
+            : Text(tabsTitle[_currentIndex]),
         actions: [
           Visibility(
               visible: _currentIndex == 1,
               child: IconButton(
-                  icon: Icon(Icons.search),
+                  icon: Icon(!_isSearching ? Icons.search : Icons.clear),
                   onPressed: () {
                     setState(() {
                       _isSearching = !_isSearching;
@@ -96,6 +104,8 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     _currentIndex = 0;
+    _isSearching = false;
+    _search = '';
     super.initState();
   }
 }

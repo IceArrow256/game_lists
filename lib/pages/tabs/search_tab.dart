@@ -4,8 +4,10 @@ import 'package:game_list/db/model/game.dart';
 import 'package:game_list/pages/game/game_view.dart';
 
 class SearchTab extends StatefulWidget {
+  final String search;
+
   @override
-  const SearchTab({Key key}) : super(key: key);
+  const SearchTab({Key key, this.search}) : super(key: key);
 
   _SearchTabState createState() => _SearchTabState();
 }
@@ -17,6 +19,7 @@ class _SearchTabState extends State<SearchTab> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.search);
     return FutureBuilder<List<Game>>(
       future: _getAllGame(),
       builder: (context, snapshot) {
@@ -28,21 +31,46 @@ class _SearchTabState extends State<SearchTab> {
                 return SizedBox(height: 4);
               } else {
                 return Card(
-                  margin: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                  child: ListTile(
-                    title: Text(snapshot.data[index - 1].name),
-                    subtitle: Text('Release: 2020\nAvg Rating: 9.99'),
-                    leading: CircleAvatar(
-                      backgroundImage: Image.network(
-                        snapshot.data[index - 1].coverUrl,
-                      ).image,
-                    ),
+                  margin: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(6.0),
                     onTap: () async {
                       await Navigator.pushNamed(context, GameView.routeName,
                           arguments: snapshot.data[index - 1]);
                       setState(() {});
                     },
-                    isThreeLine: true,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(2.0),
+                            child: Image.network(
+                              snapshot.data[index - 1].coverUrl,
+                              width: 100,
+                              height: 133,
+                              fit: BoxFit.fill,
+                            ),
+                          ),
+                          Flexible(
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
+                              child: Column(
+                                children: [
+                                  Text(
+                                    snapshot.data[index - 1].name,
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
                   ),
                 );
               }
