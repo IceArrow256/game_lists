@@ -17,6 +17,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int _currentIndex;
+  bool _isSearching = false;
 
   final tabsTitle = [
     'Game List',
@@ -38,7 +39,22 @@ class _HomeState extends State<Home> {
     return Scaffold(
       appBar: AppBar(
         leading: Icon(Icons.gamepad),
-        title: Text(tabsTitle[_currentIndex]),
+        title: !_isSearching
+            ? Text(tabsTitle[_currentIndex])
+            : TextField(
+                decoration: InputDecoration(hintText: 'Search'),
+              ),
+        actions: [
+          Visibility(
+              visible: _currentIndex == 1,
+              child: IconButton(
+                  icon: Icon(Icons.search),
+                  onPressed: () {
+                    setState(() {
+                      _isSearching = !_isSearching;
+                    });
+                  }))
+        ],
       ),
       body: tabs[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(

@@ -1,4 +1,7 @@
 ## [0.7.0] - 2020-02-09
+### Added
+- New dark and light theme.
+
 ### Fixed
 - Status icon color for light theme.
 

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:game_list/pages/game/game_add.dart';
 import 'package:game_list/pages/game/game_edit.dart';
 import 'package:game_list/pages/game/game_view.dart';
-import 'package:game_list/pages/game/game_add.dart';
 import 'package:game_list/pages/home.dart';
 import 'package:game_list/themes/dark_theme.dart';
 import 'package:game_list/themes/light_theme.dart';
@@ -16,7 +17,7 @@ class App extends StatefulWidget {
   _AppState createState() => _AppState();
 }
 
-class _AppState extends State<App> {
+class _AppState extends State<App> with WidgetsBindingObserver {
   bool _isDarkTheme;
 
   @override
@@ -36,9 +37,23 @@ class _AppState extends State<App> {
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      _updateAppBar();
+    }
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
   void initState() {
     _isDarkTheme = false;
     _applyTheme();
+    WidgetsBinding.instance.addObserver(this);
     super.initState();
   }
 
@@ -48,6 +63,14 @@ class _AppState extends State<App> {
     setState(() {
       _isDarkTheme = isDarkTheme;
     });
+    _updateAppBar();
+  }
+
+  _updateAppBar() {
+    var systemOverlayStyle = _isDarkTheme
+        ? darkTheme.appBarTheme.systemOverlayStyle
+        : lightTheme.appBarTheme.systemOverlayStyle;
+    SystemChrome.setSystemUIOverlayStyle(systemOverlayStyle);
   }
 
   _updateTheme(bool value) async {
@@ -56,5 +79,6 @@ class _AppState extends State<App> {
     });
     var prefs = await SharedPreferences.getInstance();
     prefs.setBool('isDarkTheme', _isDarkTheme);
+    _updateAppBar();
   }
 }
