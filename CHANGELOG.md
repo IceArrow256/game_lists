@@ -1,3 +1,7 @@
+## [0.7.0] - 2020-02-09
+### Fixed
+- Status icon color for light theme.
+
 ## [0.6.0] - 2020-02-08
 ### Added
 - Float action button for search tab and game view page.
