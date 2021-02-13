@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:game_list/db/database.dart';
 import 'package:game_list/pages/game/game_add.dart';
 import 'package:game_list/pages/tabs/tabs.dart';
 
@@ -19,6 +20,9 @@ class _HomeState extends State<Home> {
   int _currentIndex;
   bool _isSearching;
   String _search;
+  final Future<AppDatabase> _database = $FloorAppDatabase
+      .databaseBuilder('game_list.db')
+      .addMigrations([migration1to2]).build();
 
   final tabsTitle = [
     'Game List',
@@ -31,8 +35,8 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     final tabs = [
       HomeTab(),
-      SearchTab(search: _search),
-      GamesTab(),
+      SearchTab(database: _database, search: _search),
+      GamesTab(database: _database, search: _search),
       SettingsTab(
           isDarkTheme: widget.isDarkTheme,
           updateIsDarkTheme: widget.updateTheme) // Settings tab

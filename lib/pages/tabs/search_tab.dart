@@ -5,21 +5,17 @@ import 'package:game_list/pages/game/game_view.dart';
 
 class SearchTab extends StatefulWidget {
   final String search;
+  final Future<AppDatabase> database;
 
   @override
-  const SearchTab({Key key, this.search}) : super(key: key);
+  const SearchTab({Key key, this.database, this.search}) : super(key: key);
 
   _SearchTabState createState() => _SearchTabState();
 }
 
 class _SearchTabState extends State<SearchTab> {
-  final Future<AppDatabase> _database = $FloorAppDatabase
-      .databaseBuilder('game_list.db')
-      .addMigrations([migration1to2]).build();
-
   @override
   Widget build(BuildContext context) {
-    print(widget.search);
     return FutureBuilder<List<Game>>(
       future: _getGames(widget.search),
       builder: (context, snapshot) {
@@ -88,7 +84,7 @@ class _SearchTabState extends State<SearchTab> {
   }
 
   Future<List<Game>> _getGames(String name) async {
-    final database = await _database;
+    final database = await widget.database;
     if (name == "") {
       return database.gameDao.findAllGames();
     } else {

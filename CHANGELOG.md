@@ -2,9 +2,13 @@
 ### Added
 - Functionality to search field.
 - Game sorting in search tab.
+- Game in list entity.
 
 ### Fixed
 - Text field color in light theme.
+
+### Changed
+- Share database object for search and games tas.
 
 ## [0.7.0] - 2020-02-09
 ### Added

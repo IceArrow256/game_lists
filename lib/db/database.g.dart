@@ -62,6 +62,8 @@ class _$AppDatabase extends AppDatabase {
 
   GameDao _gameDaoInstance;
 
+  GameInListDao _gameInListDaoInstance;
+
   Future<sqflite.Database> open(String path, List<Migration> migrations,
       [Callback callback]) async {
     final databaseOptions = sqflite.OpenDatabaseOptions(
@@ -81,6 +83,8 @@ class _$AppDatabase extends AppDatabase {
       onCreate: (database, version) async {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `Game` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT NOT NULL, `cover_url` TEXT)');
+        await database.execute(
+            'CREATE TABLE IF NOT EXISTS `GameInList` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `game_id` INTEGER NOT NULL, `date_added` INTEGER NOT NULL, FOREIGN KEY (`game_id`) REFERENCES `Game` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION)');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -91,6 +95,11 @@ class _$AppDatabase extends AppDatabase {
   @override
   GameDao get gameDao {
     return _gameDaoInstance ??= _$GameDao(database, changeListener);
+  }
+
+  @override
+  GameInListDao get gameInListDao {
+    return _gameInListDaoInstance ??= _$GameInListDao(database, changeListener);
   }
 }
 
@@ -185,3 +194,96 @@ class _$GameDao extends GameDao {
     return _gameDeletionAdapter.deleteListAndReturnChangedRows(games);
   }
 }
+
+class _$GameInListDao extends GameInListDao {
+  _$GameInListDao(this.database, this.changeListener)
+      : _queryAdapter = QueryAdapter(database, changeListener),
+        _gameInListInsertionAdapter = InsertionAdapter(
+            database,
+            'GameInList',
+            (GameInList item) => <String, dynamic>{
+                  'id': item.id,
+                  'game_id': item.gameId,
+                  'date_added': _dateTimeConverter.encode(item.dateAdded)
+                },
+            changeListener),
+        _gameInListUpdateAdapter = UpdateAdapter(
+            database,
+            'GameInList',
+            ['id'],
+            (GameInList item) => <String, dynamic>{
+                  'id': item.id,
+                  'game_id': item.gameId,
+                  'date_added': _dateTimeConverter.encode(item.dateAdded)
+                },
+            changeListener),
+        _gameInListDeletionAdapter = DeletionAdapter(
+            database,
+            'GameInList',
+            ['id'],
+            (GameInList item) => <String, dynamic>{
+                  'id': item.id,
+                  'game_id': item.gameId,
+                  'date_added': _dateTimeConverter.encode(item.dateAdded)
+                },
+            changeListener);
+
+  final sqflite.DatabaseExecutor database;
+
+  final StreamController<String> changeListener;
+
+  final QueryAdapter _queryAdapter;
+
+  final InsertionAdapter<GameInList> _gameInListInsertionAdapter;
+
+  final UpdateAdapter<GameInList> _gameInListUpdateAdapter;
+
+  final DeletionAdapter<GameInList> _gameInListDeletionAdapter;
+
+  @override
+  Future<List<GameInList>> findAllGamesInList() async {
+    return _queryAdapter.queryList('SELECT * FROM GameInList',
+        mapper: (Map<String, dynamic> row) => GameInList(
+            row['id'] as int,
+            row['game_id'] as int,
+            _dateTimeConverter.decode(row['date_added'] as int)));
+  }
+
+  @override
+  Stream<GameInList> findGameById(int id) {
+    return _queryAdapter.queryStream('SELECT * FROM GameInList WHERE id = ?',
+        arguments: <dynamic>[id],
+        queryableName: 'GameInList',
+        isView: false,
+        mapper: (Map<String, dynamic> row) => GameInList(
+            row['id'] as int,
+            row['game_id'] as int,
+            _dateTimeConverter.decode(row['date_added'] as int)));
+  }
+
+  @override
+  Future<void> insertGameInList(GameInList gameInList) async {
+    await _gameInListInsertionAdapter.insert(
+        gameInList, OnConflictStrategy.abort);
+  }
+
+  @override
+  Future<void> updateGameInList(GameInList gameInList) async {
+    await _gameInListUpdateAdapter.update(
+        gameInList, OnConflictStrategy.replace);
+  }
+
+  @override
+  Future<void> deleteGameInList(GameInList gameInList) async {
+    await _gameInListDeletionAdapter.delete(gameInList);
+  }
+
+  @override
+  Future<int> deleteGamesInList(List<GameInList> gamesInList) {
+    return _gameInListDeletionAdapter
+        .deleteListAndReturnChangedRows(gamesInList);
+  }
+}
+
+// ignore_for_file: unused_element
+final _dateTimeConverter = DateTimeConverter();
