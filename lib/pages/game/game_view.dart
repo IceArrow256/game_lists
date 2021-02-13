@@ -64,8 +64,7 @@ class _GameViewState extends State<GameView> {
                   children: [
                     Text(
                       game.name,
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+                      style: TextStyle(fontSize: 20),
                     ),
                   ],
                 ),

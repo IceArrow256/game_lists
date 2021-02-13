@@ -21,7 +21,7 @@ class _SearchTabState extends State<SearchTab> {
   Widget build(BuildContext context) {
     print(widget.search);
     return FutureBuilder<List<Game>>(
-      future: _getAllGame(),
+      future: _getGames(widget.search),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return ListView.builder(
@@ -57,12 +57,11 @@ class _SearchTabState extends State<SearchTab> {
                             child: Padding(
                               padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
                               child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
                                     snapshot.data[index - 1].name,
-                                    style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w600),
+                                    style: TextStyle(fontSize: 20),
                                   ),
                                 ],
                               ),
@@ -88,8 +87,12 @@ class _SearchTabState extends State<SearchTab> {
     super.initState();
   }
 
-  Future<List<Game>> _getAllGame() async {
+  Future<List<Game>> _getGames(String name) async {
     final database = await _database;
-    return database.gameDao.findAllGame();
+    if (name == "") {
+      return database.gameDao.findAllGames();
+    } else {
+      return database.gameDao.findGamesByName('%$name%');
+    }
   }
 }

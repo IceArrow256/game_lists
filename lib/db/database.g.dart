@@ -140,8 +140,16 @@ class _$GameDao extends GameDao {
   final DeletionAdapter<Game> _gameDeletionAdapter;
 
   @override
-  Future<List<Game>> findAllGame() async {
+  Future<List<Game>> findAllGames() async {
     return _queryAdapter.queryList('SELECT * FROM Game',
+        mapper: (Map<String, dynamic> row) => Game(row['id'] as int,
+            row['name'] as String, row['cover_url'] as String));
+  }
+
+  @override
+  Future<List<Game>> findGamesByName(String name) async {
+    return _queryAdapter.queryList('SELECT * FROM Game WHERE name LIKE ?',
+        arguments: <dynamic>[name],
         mapper: (Map<String, dynamic> row) => Game(row['id'] as int,
             row['name'] as String, row['cover_url'] as String));
   }
