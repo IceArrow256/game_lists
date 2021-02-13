@@ -141,14 +141,15 @@ class _$GameDao extends GameDao {
 
   @override
   Future<List<Game>> findAllGames() async {
-    return _queryAdapter.queryList('SELECT * FROM Game',
+    return _queryAdapter.queryList('SELECT * FROM Game ORDER BY name ASC',
         mapper: (Map<String, dynamic> row) => Game(row['id'] as int,
             row['name'] as String, row['cover_url'] as String));
   }
 
   @override
   Future<List<Game>> findGamesByName(String name) async {
-    return _queryAdapter.queryList('SELECT * FROM Game WHERE name LIKE ?',
+    return _queryAdapter.queryList(
+        'SELECT * FROM Game WHERE name LIKE ? ORDER BY name ASC',
         arguments: <dynamic>[name],
         mapper: (Map<String, dynamic> row) => Game(row['id'] as int,
             row['name'] as String, row['cover_url'] as String));

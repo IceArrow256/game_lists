@@ -60,6 +60,9 @@ class _HomeState extends State<Home> {
                   onPressed: () {
                     setState(() {
                       _isSearching = !_isSearching;
+                      if (!_isSearching) {
+                        _search = '';
+                      }
                     });
                   }))
         ],

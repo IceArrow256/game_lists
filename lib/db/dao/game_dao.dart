@@ -4,10 +4,10 @@ import 'package:game_list/db/model/game.dart';
 
 @dao
 abstract class GameDao {
-  @Query('SELECT * FROM Game')
+  @Query('SELECT * FROM Game ORDER BY name ASC')
   Future<List<Game>> findAllGames();
 
-  @Query('SELECT * FROM Game WHERE name LIKE :name')
+  @Query('SELECT * FROM Game WHERE name LIKE :name ORDER BY name ASC')
   Future<List<Game>> findGamesByName(String name);
 
   @Query('SELECT * FROM Game WHERE id = :id')

@@ -1,6 +1,7 @@
 ## [0.8.0] - 2020-02-13
 ### Added
 - Functionality to search field.
+- Game sorting in search tab.
 
 ### Fixed
 - Text field color in light theme.
