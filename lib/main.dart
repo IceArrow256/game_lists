@@ -67,9 +67,8 @@ class _AppState extends State<App> with WidgetsBindingObserver {
   }
 
   _updateAppBar() {
-    var systemOverlayStyle = _isDarkTheme
-        ? darkTheme.appBarTheme.systemOverlayStyle
-        : lightTheme.appBarTheme.systemOverlayStyle;
+    var systemOverlayStyle =
+        _isDarkTheme ? darkSystemUiOverlayStyle : lightSystemUiOverlayStyle;
     SystemChrome.setSystemUIOverlayStyle(systemOverlayStyle);
   }
 

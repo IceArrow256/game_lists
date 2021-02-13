@@ -1,3 +1,7 @@
+## [0.8.0] - 2020-02-13
+### Fixed
+- Text field color in light theme.
+
 ## [0.7.0] - 2020-02-09
 ### Added
 - New dark and light theme.
