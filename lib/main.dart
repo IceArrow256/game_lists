@@ -13,7 +13,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final database = await $FloorAppDatabase
       .databaseBuilder('game_list.db')
-      .addMigrations([migration1to2]).build();
+      .addMigrations([migration1to2, migration2to3]).build();
   runApp(App(database: database));
 }
 
@@ -40,7 +40,7 @@ class _AppState extends State<App> with WidgetsBindingObserver {
             database: widget.database,
             isDarkTheme: _isDarkTheme,
             updateTheme: _updateTheme),
-        GameView.routeName: (context) => GameView(),
+        GameView.routeName: (context) => GameView(database: widget.database),
         GameAdd.routeName: (context) => GameAdd(),
         GameEdit.routeName: (context) => GameEdit(),
       },

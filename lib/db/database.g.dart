@@ -67,7 +67,7 @@ class _$AppDatabase extends AppDatabase {
   Future<sqflite.Database> open(String path, List<Migration> migrations,
       [Callback callback]) async {
     final databaseOptions = sqflite.OpenDatabaseOptions(
-      version: 2,
+      version: 3,
       onConfigure: (database) async {
         await database.execute('PRAGMA foreign_keys = ON');
       },
@@ -85,6 +85,8 @@ class _$AppDatabase extends AppDatabase {
             'CREATE TABLE IF NOT EXISTS `Game` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT NOT NULL, `cover_url` TEXT)');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `GameInList` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `game_id` INTEGER NOT NULL, `date_added` INTEGER NOT NULL, FOREIGN KEY (`game_id`) REFERENCES `Game` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION)');
+        await database.execute(
+            'CREATE UNIQUE INDEX `index_GameInList_game_id` ON `GameInList` (`game_id`)');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -149,25 +151,8 @@ class _$GameDao extends GameDao {
   final DeletionAdapter<Game> _gameDeletionAdapter;
 
   @override
-  Future<List<Game>> findAllGames() async {
-    return _queryAdapter.queryList('SELECT * FROM Game ORDER BY name ASC',
-        mapper: (Map<String, dynamic> row) => Game(row['id'] as int,
-            row['name'] as String, row['cover_url'] as String));
-  }
-
-  @override
-  Future<List<Game>> findGamesByName(String name) async {
-    return _queryAdapter.queryList(
-        'SELECT * FROM Game WHERE name LIKE ? ORDER BY name ASC',
-        arguments: <dynamic>[name],
-        mapper: (Map<String, dynamic> row) => Game(row['id'] as int,
-            row['name'] as String, row['cover_url'] as String));
-  }
-
-  @override
-  Stream<Game> findGameById(int id) {
-    return _queryAdapter.queryStream('SELECT * FROM Game WHERE id = ?',
-        arguments: <dynamic>[id],
+  Stream<List<Game>> findAllAsStream() {
+    return _queryAdapter.queryListStream('SELECT * FROM Game ORDER BY name ASC',
         queryableName: 'Game',
         isView: false,
         mapper: (Map<String, dynamic> row) => Game(row['id'] as int,
@@ -175,7 +160,33 @@ class _$GameDao extends GameDao {
   }
 
   @override
-  Future<void> insertGame(Game game) async {
+  Stream<List<Game>> findAllAsStreamByName(String name) {
+    return _queryAdapter.queryListStream(
+        'SELECT * FROM Game WHERE name LIKE ? ORDER BY name ASC',
+        arguments: <dynamic>[name],
+        queryableName: 'Game',
+        isView: false,
+        mapper: (Map<String, dynamic> row) => Game(row['id'] as int,
+            row['name'] as String, row['cover_url'] as String));
+  }
+
+  @override
+  Future<List<Game>> findAllGames() async {
+    return _queryAdapter.queryList('SELECT * FROM Game ORDER BY name ASC',
+        mapper: (Map<String, dynamic> row) => Game(row['id'] as int,
+            row['name'] as String, row['cover_url'] as String));
+  }
+
+  @override
+  Future<Game> findById(int id) async {
+    return _queryAdapter.query('SELECT * FROM Game WHERE id = ?',
+        arguments: <dynamic>[id],
+        mapper: (Map<String, dynamic> row) => Game(row['id'] as int,
+            row['name'] as String, row['cover_url'] as String));
+  }
+
+  @override
+  Future<void> insertObject(Game game) async {
     await _gameInsertionAdapter.insert(game, OnConflictStrategy.abort);
   }
 
@@ -197,7 +208,7 @@ class _$GameDao extends GameDao {
 
 class _$GameInListDao extends GameInListDao {
   _$GameInListDao(this.database, this.changeListener)
-      : _queryAdapter = QueryAdapter(database, changeListener),
+      : _queryAdapter = QueryAdapter(database),
         _gameInListInsertionAdapter = InsertionAdapter(
             database,
             'GameInList',
@@ -205,8 +216,7 @@ class _$GameInListDao extends GameInListDao {
                   'id': item.id,
                   'game_id': item.gameId,
                   'date_added': _dateTimeConverter.encode(item.dateAdded)
-                },
-            changeListener),
+                }),
         _gameInListUpdateAdapter = UpdateAdapter(
             database,
             'GameInList',
@@ -215,8 +225,7 @@ class _$GameInListDao extends GameInListDao {
                   'id': item.id,
                   'game_id': item.gameId,
                   'date_added': _dateTimeConverter.encode(item.dateAdded)
-                },
-            changeListener),
+                }),
         _gameInListDeletionAdapter = DeletionAdapter(
             database,
             'GameInList',
@@ -225,8 +234,7 @@ class _$GameInListDao extends GameInListDao {
                   'id': item.id,
                   'game_id': item.gameId,
                   'date_added': _dateTimeConverter.encode(item.dateAdded)
-                },
-            changeListener);
+                });
 
   final sqflite.DatabaseExecutor database;
 
@@ -241,7 +249,7 @@ class _$GameInListDao extends GameInListDao {
   final DeletionAdapter<GameInList> _gameInListDeletionAdapter;
 
   @override
-  Future<List<GameInList>> findAllGamesInList() async {
+  Future<List<GameInList>> findAll() async {
     return _queryAdapter.queryList('SELECT * FROM GameInList',
         mapper: (Map<String, dynamic> row) => GameInList(
             row['id'] as int,
@@ -250,11 +258,9 @@ class _$GameInListDao extends GameInListDao {
   }
 
   @override
-  Stream<GameInList> findGameById(int id) {
-    return _queryAdapter.queryStream('SELECT * FROM GameInList WHERE id = ?',
+  Future<GameInList> findByGameId(int id) async {
+    return _queryAdapter.query('SELECT * FROM GameInList WHERE game_id = ?',
         arguments: <dynamic>[id],
-        queryableName: 'GameInList',
-        isView: false,
         mapper: (Map<String, dynamic> row) => GameInList(
             row['id'] as int,
             row['game_id'] as int,
@@ -262,7 +268,7 @@ class _$GameInListDao extends GameInListDao {
   }
 
   @override
-  Future<void> insertGameInList(GameInList gameInList) async {
+  Future<void> insertObject(GameInList gameInList) async {
     await _gameInListInsertionAdapter.insert(
         gameInList, OnConflictStrategy.abort);
   }
@@ -274,7 +280,7 @@ class _$GameInListDao extends GameInListDao {
   }
 
   @override
-  Future<void> deleteGameInList(GameInList gameInList) async {
+  Future<void> deleteObject(GameInList gameInList) async {
     await _gameInListDeletionAdapter.delete(gameInList);
   }
 

@@ -1,9 +1,16 @@
+import 'package:floor/floor.dart';
 import 'package:flutter/material.dart';
+import 'package:game_list/db/dao/game_in_list_dao.dart';
+import 'package:game_list/db/database.dart';
 import 'package:game_list/db/model/game.dart';
+import 'package:game_list/db/model/game_in_list.dart';
 import 'package:game_list/pages/game/game_edit.dart';
 
 class GameView extends StatefulWidget {
   static const routeName = '/gameView';
+  final AppDatabase database;
+
+  const GameView({Key key, @required this.database}) : super(key: key);
 
   @override
   _GameViewState createState() => _GameViewState();
@@ -11,6 +18,7 @@ class GameView extends StatefulWidget {
 
 class _GameViewState extends State<GameView> {
   Game _game;
+  GameInListDao _gameInListDao;
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +27,7 @@ class _GameViewState extends State<GameView> {
       appBar: AppBar(
         actions: [
           IconButton(
-            icon: const Icon(Icons.edit),
+            icon: Icon(Icons.edit),
             onPressed: () async {
               var _result = (await Navigator.pushNamed(
                   context, GameEdit.routeName,
@@ -41,8 +49,29 @@ class _GameViewState extends State<GameView> {
           overflow: TextOverflow.fade,
         ),
       ),
-      floatingActionButton:
-          FloatingActionButton(child: Icon(Icons.add), onPressed: () {}),
+      floatingActionButton: FloatingActionButton(
+          child: FutureBuilder<GameInList>(
+            future: _gameInListDao.findByGameId(game.id),
+            builder: (_, snapshot) {
+              if (snapshot.hasData) {
+                return Icon(Icons.delete);
+              } else {
+                return Icon(Icons.add);
+              }
+            },
+          ),
+          onPressed: () async {
+            var gameInList = await _gameInListDao.findByGameId(game.id);
+            if (gameInList == null) {
+              var now = DateTime.now();
+              var gameInList = GameInList(null, game.id, now);
+              await _gameInListDao.insertObject(gameInList);
+              setState(() {});
+            } else {
+              await _gameInListDao.deleteObject(gameInList);
+              setState(() {});
+            }
+          }),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Row(
@@ -74,5 +103,11 @@ class _GameViewState extends State<GameView> {
         ),
       ),
     );
+  }
+
+  @override
+  void initState() {
+    _gameInListDao = widget.database.gameInListDao;
+    super.initState();
   }
 }

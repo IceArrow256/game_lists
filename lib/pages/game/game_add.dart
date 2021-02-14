@@ -72,6 +72,6 @@ class _GameAddState extends State<GameAdd> {
   void _createGame() async {
     final database = await _database;
     var game = Game(null, _name, _coverUrl);
-    database.gameDao.insertGame(game);
+    database.gameDao.insertObject(game);
   }
 }

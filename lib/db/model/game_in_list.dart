@@ -2,7 +2,9 @@ import 'package:floor/floor.dart';
 import 'package:game_list/db/model/game.dart';
 
 @Entity(tableName: 'GameInList', foreignKeys: [
-  ForeignKey(childColumns: ['game_id'], parentColumns: ['id'], entity: Game)
+  ForeignKey(childColumns: ['game_id'], parentColumns: ['id'], entity: Game),
+], indices: [
+  Index(value: ['game_id'], unique: true)
 ])
 class GameInList {
   @PrimaryKey(autoGenerate: true)
@@ -16,15 +18,3 @@ class GameInList {
 
   GameInList(this.id, this.gameId, this.dateAdded);
 }
-
-// class Dog {
-//   @PrimaryKey()
-//   final int id;
-
-//   final String name;
-
-//   @ColumnInfo(name: 'owner_id')
-//   final int ownerId;
-
-//   Dog(this.id, this.name, this.ownerId);
-// }

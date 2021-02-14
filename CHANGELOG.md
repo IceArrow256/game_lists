@@ -1,6 +1,12 @@
 ## [0.9.0] - 2020-02-14
+### Added
+- Make migration from 2 to 3 version.
+- User can add game to own game list in game view.
+
 ### Changed
 - Make database object global for all app.
+- New way to fetch data for search tab.
+- Game tab show user's game list instead behave like search tab.
 
 ## [0.8.0] - 2020-02-13
 ### Added

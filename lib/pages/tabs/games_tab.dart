@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:game_list/db/dao/game_dao.dart';
+import 'package:game_list/db/dao/game_in_list_dao.dart';
 import 'package:game_list/db/database.dart';
 import 'package:game_list/db/model/game.dart';
 import 'package:game_list/pages/game/game_view.dart';
@@ -14,6 +16,9 @@ class GamesTab extends StatefulWidget {
 }
 
 class _GamesTabState extends State<GamesTab> {
+  GameInListDao _gameInListDao;
+  GameDao _gameDao;
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<Game>>(
@@ -80,14 +85,22 @@ class _GamesTabState extends State<GamesTab> {
 
   @override
   void initState() {
+    _gameInListDao = widget.database.gameInListDao;
+    _gameDao = widget.database.gameDao;
     super.initState();
   }
 
   Future<List<Game>> _getGames(String name) async {
+    List<Game> games = [];
     if (name == "") {
-      return widget.database.gameDao.findAllGames();
-    } else {
-      return widget.database.gameDao.findGamesByName('%$name%');
-    }
+      var gamesInList = await _gameInListDao.findAll();
+      for (var gameInList in gamesInList) {
+        var game = await _gameDao.findById(gameInList.gameId);
+        var new_game = Game(game.id, game.name, game.coverUrl);
+        games.add(new_game);
+      }
+
+      return games;
+    } else {}
   }
 }
