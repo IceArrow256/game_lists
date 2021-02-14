@@ -5,11 +5,11 @@ import 'package:game_list/pages/game/game_view.dart';
 
 class GamesTab extends StatefulWidget {
   final String search;
-  final Future<AppDatabase> database;
+  final AppDatabase database;
 
-  @override
   const GamesTab({Key key, this.database, this.search}) : super(key: key);
 
+  @override
   _GamesTabState createState() => _GamesTabState();
 }
 
@@ -84,11 +84,10 @@ class _GamesTabState extends State<GamesTab> {
   }
 
   Future<List<Game>> _getGames(String name) async {
-    final database = await widget.database;
     if (name == "") {
-      return database.gameDao.findAllGames();
+      return widget.database.gameDao.findAllGames();
     } else {
-      return database.gameDao.findGamesByName('%$name%');
+      return widget.database.gameDao.findGamesByName('%$name%');
     }
   }
 }

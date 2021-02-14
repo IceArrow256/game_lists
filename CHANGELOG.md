@@ -1,3 +1,7 @@
+## [0.9.0] - 2020-02-14
+### Changed
+- Make database object global for all app.
+
 ## [0.8.0] - 2020-02-13
 ### Added
 - Functionality to search field.
@@ -8,7 +12,7 @@
 - Text field color in light theme.
 
 ### Changed
-- Share database object for search and games tas.
+- Share database object for search and games tab.
 
 ## [0.7.0] - 2020-02-09
 ### Added

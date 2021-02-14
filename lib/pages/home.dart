@@ -5,14 +5,18 @@ import 'package:game_list/pages/tabs/tabs.dart';
 
 class Home extends StatefulWidget {
   static const routeName = '/';
-
   final ValueChanged<bool> updateTheme;
   final bool isDarkTheme;
+  final AppDatabase database;
 
-  @override
-  const Home({Key key, @required this.isDarkTheme, @required this.updateTheme})
+  const Home(
+      {Key key,
+      @required this.database,
+      @required this.isDarkTheme,
+      @required this.updateTheme})
       : super(key: key);
 
+  @override
   _HomeState createState() => _HomeState();
 }
 
@@ -20,9 +24,6 @@ class _HomeState extends State<Home> {
   int _currentIndex;
   bool _isSearching;
   String _search;
-  final Future<AppDatabase> _database = $FloorAppDatabase
-      .databaseBuilder('game_list.db')
-      .addMigrations([migration1to2]).build();
 
   final tabsTitle = [
     'Game List',
@@ -35,8 +36,8 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     final tabs = [
       HomeTab(),
-      SearchTab(database: _database, search: _search),
-      GamesTab(database: _database, search: _search),
+      SearchTab(database: widget.database, search: _search),
+      GamesTab(database: widget.database, search: _search),
       SettingsTab(
           isDarkTheme: widget.isDarkTheme,
           updateIsDarkTheme: widget.updateTheme) // Settings tab

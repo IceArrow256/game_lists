@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:game_list/db/database.dart';
 import 'package:game_list/pages/game/game_add.dart';
 import 'package:game_list/pages/game/game_edit.dart';
 import 'package:game_list/pages/game/game_view.dart';
@@ -8,11 +9,19 @@ import 'package:game_list/themes/dark_theme.dart';
 import 'package:game_list/themes/light_theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
-  runApp(App());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final database = await $FloorAppDatabase
+      .databaseBuilder('game_list.db')
+      .addMigrations([migration1to2]).build();
+  runApp(App(database: database));
 }
 
 class App extends StatefulWidget {
+  final AppDatabase database;
+
+  const App({Key key, @required this.database}) : super(key: key);
+
   @override
   _AppState createState() => _AppState();
 }
@@ -27,8 +36,10 @@ class _AppState extends State<App> with WidgetsBindingObserver {
       theme: _isDarkTheme ? darkTheme : lightTheme,
       debugShowCheckedModeBanner: false,
       routes: {
-        Home.routeName: (context) =>
-            Home(isDarkTheme: _isDarkTheme, updateTheme: _updateTheme),
+        Home.routeName: (context) => Home(
+            database: widget.database,
+            isDarkTheme: _isDarkTheme,
+            updateTheme: _updateTheme),
         GameView.routeName: (context) => GameView(),
         GameAdd.routeName: (context) => GameAdd(),
         GameEdit.routeName: (context) => GameEdit(),
