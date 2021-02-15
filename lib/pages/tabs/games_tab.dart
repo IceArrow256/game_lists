@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:game_list/db/dao/game_dao.dart';
 import 'package:game_list/db/dao/game_in_list_dao.dart';
 import 'package:game_list/db/database.dart';
-import 'package:game_list/db/model/game.dart';
-import 'package:game_list/pages/game/game_view.dart';
+import 'package:game_list/pages/game_in_list/game_in_list_view.dart';
 
 class GamesTab extends StatefulWidget {
   final String search;
@@ -21,23 +20,26 @@ class _GamesTabState extends State<GamesTab> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<Game>>(
-      future: _getGames(widget.search),
+    return FutureBuilder<List<Map<String, Object>>>(
+      future: _getGamesInList(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return ListView.builder(
             itemCount: snapshot.data.length + 1,
-            itemBuilder: (context, index) {
-              if (index == 0) {
+            itemBuilder: (context, i) {
+              if (i == 0) {
                 return SizedBox(height: 4);
               } else {
+                var gamesInList = snapshot.data;
+                var date = gamesInList[i - 1]['dateAdded'] as DateTime;
                 return Card(
                   margin: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
                   child: InkWell(
                     borderRadius: BorderRadius.circular(6.0),
                     onTap: () async {
-                      await Navigator.pushNamed(context, GameView.routeName,
-                          arguments: snapshot.data[index - 1]);
+                      await Navigator.pushNamed(
+                          context, GameInListView.routeName,
+                          arguments: gamesInList[i - 1]);
                       setState(() {});
                     },
                     child: Padding(
@@ -48,7 +50,7 @@ class _GamesTabState extends State<GamesTab> {
                           ClipRRect(
                             borderRadius: BorderRadius.circular(2.0),
                             child: Image.network(
-                              snapshot.data[index - 1].coverUrl,
+                              gamesInList[i - 1]['coverUrl'],
                               width: 100,
                               height: 133,
                               fit: BoxFit.fill,
@@ -61,8 +63,11 @@ class _GamesTabState extends State<GamesTab> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    snapshot.data[index - 1].name,
+                                    gamesInList[i - 1]['name'],
                                     style: TextStyle(fontSize: 20),
+                                  ),
+                                  Text(
+                                    'Date added: ${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}',
                                   ),
                                 ],
                               ),
@@ -90,17 +95,18 @@ class _GamesTabState extends State<GamesTab> {
     super.initState();
   }
 
-  Future<List<Game>> _getGames(String name) async {
-    List<Game> games = [];
-    if (name == "") {
-      var gamesInList = await _gameInListDao.findAll();
-      for (var gameInList in gamesInList) {
-        var game = await _gameDao.findById(gameInList.gameId);
-        var new_game = Game(game.id, game.name, game.coverUrl);
-        games.add(new_game);
-      }
-
-      return games;
-    } else {}
+  Future<List<Map<String, Object>>> _getGamesInList() async {
+    List<Map<String, Object>> objects = [];
+    for (var gameInList in await _gameInListDao.findAll()) {
+      var game = await _gameDao.findById(gameInList.gameId);
+      objects.add({
+        'id': gameInList.id,
+        'gameId': game.id,
+        'name': game.name,
+        'coverUrl': game.coverUrl,
+        'dateAdded': gameInList.dateAdded,
+      });
+    }
+    return objects;
   }
 }

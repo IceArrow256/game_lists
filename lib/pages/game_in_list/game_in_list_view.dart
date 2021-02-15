@@ -6,23 +6,25 @@ import 'package:game_list/db/model/game.dart';
 import 'package:game_list/db/model/game_in_list.dart';
 import 'package:game_list/pages/game/game_edit.dart';
 
-class GameView extends StatefulWidget {
-  static const routeName = '/gameView';
+class GameInListView extends StatefulWidget {
+  static const routeName = '/gameInListView';
   final AppDatabase database;
 
-  const GameView({Key key, @required this.database}) : super(key: key);
+  const GameInListView({Key key, @required this.database}) : super(key: key);
 
   @override
-  _GameViewState createState() => _GameViewState();
+  _GameInListViewState createState() => _GameInListViewState();
 }
 
-class _GameViewState extends State<GameView> {
-  Game _game;
+class _GameInListViewState extends State<GameInListView> {
+  Map<String, Object> _gameInList;
   GameInListDao _gameInListDao;
 
   @override
   Widget build(BuildContext context) {
-    final Game game = _game ?? ModalRoute.of(context).settings.arguments;
+    final Map<String, Object> gameInList =
+        _gameInList ?? ModalRoute.of(context).settings.arguments;
+    var date = gameInList['dateAdded'] as DateTime;
     return Scaffold(
       appBar: AppBar(
         actions: [
@@ -31,10 +33,10 @@ class _GameViewState extends State<GameView> {
             onPressed: () async {
               var _result = (await Navigator.pushNamed(
                   context, GameEdit.routeName,
-                  arguments: game));
-              if (_result.runtimeType == Game) {
+                  arguments: gameInList));
+              if (_result.runtimeType == Map) {
                 setState(() {
-                  _game = _result as Game;
+                  _gameInList = _result as Map<String, Object>;
                 });
               } else if (_result.runtimeType == String) {
                 if (_result == 'delete') {
@@ -45,32 +47,17 @@ class _GameViewState extends State<GameView> {
           ),
         ],
         title: Text(
-          game.name,
+          gameInList['name'],
           overflow: TextOverflow.fade,
         ),
       ),
       floatingActionButton: FloatingActionButton(
-          child: FutureBuilder<GameInList>(
-            future: _gameInListDao.findByGameId(game.id),
-            builder: (_, snapshot) {
-              if (snapshot.hasData) {
-                return Icon(Icons.delete);
-              } else {
-                return Icon(Icons.add);
-              }
-            },
-          ),
+          child: Icon(Icons.delete),
           onPressed: () async {
-            var gameInList = await _gameInListDao.findByGameId(game.id);
-            if (gameInList == null) {
-              var now = DateTime.now();
-              var gameInList = GameInList(null, game.id, now);
-              await _gameInListDao.insertObject(gameInList);
-              setState(() {});
-            } else {
-              await _gameInListDao.deleteObject(gameInList);
-              setState(() {});
-            }
+            var object =
+                await _gameInListDao.findByGameId(gameInList['gameId']);
+            await _gameInListDao.deleteObject(object);
+            setState(() {});
             Navigator.pop(context);
           }),
       body: Padding(
@@ -81,7 +68,7 @@ class _GameViewState extends State<GameView> {
             ClipRRect(
               borderRadius: BorderRadius.circular(2.0),
               child: Image.network(
-                game.coverUrl,
+                gameInList['coverUrl'],
                 width: 128,
                 height: 171,
                 fit: BoxFit.fill,
@@ -94,8 +81,11 @@ class _GameViewState extends State<GameView> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      game.name,
+                      gameInList['name'],
                       style: TextStyle(fontSize: 20),
+                    ),
+                    Text(
+                      'Date added: ${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}',
                     ),
                   ],
                 ),

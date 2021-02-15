@@ -1,3 +1,11 @@
+## [0.10.0] - 2020-02-15
+### Added
+- Game in list view page.
+- Add field for game in list at game tab.
+
+### Changed
+- Same improvements from game in list view to game view page.
+
 ## [0.9.0] - 2020-02-14
 ### Added
 - Make migration from 2 to 3 version.
