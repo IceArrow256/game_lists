@@ -4,6 +4,7 @@ import 'package:game_list/db/database.dart';
 import 'package:game_list/pages/game/game_add.dart';
 import 'package:game_list/pages/game/game_edit.dart';
 import 'package:game_list/pages/game/game_view.dart';
+import 'package:game_list/pages/game_in_list/game_in_list_edit.dart';
 import 'package:game_list/pages/game_in_list/game_in_list_view.dart';
 import 'package:game_list/pages/home.dart';
 import 'package:game_list/themes/dark_theme.dart';
@@ -41,11 +42,13 @@ class _AppState extends State<App> with WidgetsBindingObserver {
             database: widget.database,
             isDarkTheme: _isDarkTheme,
             updateTheme: _updateTheme),
-        GameView.routeName: (context) => GameView(database: widget.database),
+        GameAdd.routeName: (context) => GameAdd(),
+        GameEdit.routeName: (context) => GameEdit(database: widget.database),
+        GameInListEdit.routeName: (context) =>
+            GameInListEdit(database: widget.database),
         GameInListView.routeName: (context) =>
             GameInListView(database: widget.database),
-        GameAdd.routeName: (context) => GameAdd(),
-        GameEdit.routeName: (context) => GameEdit(),
+        GameView.routeName: (context) => GameView(database: widget.database),
       },
     );
   }

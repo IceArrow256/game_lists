@@ -274,20 +274,20 @@ class _$GameInListDao extends GameInListDao {
   }
 
   @override
-  Future<void> updateGameInList(GameInList gameInList) async {
+  Future<void> updateObject(GameInList gameInList) async {
     await _gameInListUpdateAdapter.update(
         gameInList, OnConflictStrategy.replace);
-  }
-
-  @override
-  Future<void> deleteObject(GameInList gameInList) async {
-    await _gameInListDeletionAdapter.delete(gameInList);
   }
 
   @override
   Future<int> deleteGamesInList(List<GameInList> gamesInList) {
     return _gameInListDeletionAdapter
         .deleteListAndReturnChangedRows(gamesInList);
+  }
+
+  @override
+  Future<void> deleteObject(GameInList gameInList) async {
+    await _gameInListDeletionAdapter.delete(gameInList);
   }
 }
 

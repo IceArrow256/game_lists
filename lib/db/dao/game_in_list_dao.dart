@@ -19,5 +19,5 @@ abstract class GameInListDao {
   Future<void> insertObject(GameInList gameInList);
 
   @Update(onConflict: OnConflictStrategy.replace)
-  Future<void> updateGameInList(GameInList gameInList);
+  Future<void> updateObject(GameInList gameInList);
 }

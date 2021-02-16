@@ -4,6 +4,9 @@ import 'package:game_list/db/model/game.dart';
 
 class GameEdit extends StatefulWidget {
   static const routeName = '/gameEdit';
+  final AppDatabase database;
+
+  const GameEdit({Key key, @required this.database}) : super(key: key);
 
   @override
   _GameEditState createState() => _GameEditState();
@@ -14,10 +17,6 @@ class _GameEditState extends State<GameEdit> {
   Game _game;
   String _name;
   String _coverUrl;
-
-  final Future<AppDatabase> _database = $FloorAppDatabase
-      .databaseBuilder('game_list.db')
-      .addMigrations([migration1to2]).build();
 
   @override
   Widget build(BuildContext context) {
@@ -89,12 +88,10 @@ class _GameEditState extends State<GameEdit> {
   }
 
   void _deleteGame(Game game) async {
-    final database = await _database;
-    database.gameDao.deleteGame(game);
+    await widget.database.gameDao.deleteGame(game);
   }
 
   void _updateGame(Game game) async {
-    final database = await _database;
-    database.gameDao.updateGame(game);
+    await widget.database.gameDao.updateGame(game);
   }
 }

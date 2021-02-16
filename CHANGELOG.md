@@ -1,3 +1,8 @@
+## [0.11.0] - 2020-02-16
+### Added
+- Game in list edit page.
+- CRUD for game in list entity.
+
 ## [0.10.0] - 2020-02-15
 ### Added
 - Game in list view page.

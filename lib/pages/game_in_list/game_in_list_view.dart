@@ -1,10 +1,7 @@
-import 'package:floor/floor.dart';
 import 'package:flutter/material.dart';
 import 'package:game_list/db/dao/game_in_list_dao.dart';
 import 'package:game_list/db/database.dart';
-import 'package:game_list/db/model/game.dart';
-import 'package:game_list/db/model/game_in_list.dart';
-import 'package:game_list/pages/game/game_edit.dart';
+import 'package:game_list/pages/game_in_list/game_in_list_edit.dart';
 
 class GameInListView extends StatefulWidget {
   static const routeName = '/gameInListView';
@@ -32,7 +29,7 @@ class _GameInListViewState extends State<GameInListView> {
             icon: Icon(Icons.edit),
             onPressed: () async {
               var _result = (await Navigator.pushNamed(
-                  context, GameEdit.routeName,
+                  context, GameInListEdit.routeName,
                   arguments: gameInList));
               if (_result.runtimeType == Map) {
                 setState(() {

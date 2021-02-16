@@ -1,4 +1,3 @@
-import 'package:floor/floor.dart';
 import 'package:flutter/material.dart';
 import 'package:game_list/db/dao/game_in_list_dao.dart';
 import 'package:game_list/db/database.dart';
