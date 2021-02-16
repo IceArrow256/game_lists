@@ -42,7 +42,7 @@ class _AppState extends State<App> with WidgetsBindingObserver {
             database: widget.database,
             isDarkTheme: _isDarkTheme,
             updateTheme: _updateTheme),
-        GameAdd.routeName: (context) => GameAdd(),
+        GameAdd.routeName: (context) => GameAdd(database: widget.database),
         GameEdit.routeName: (context) => GameEdit(database: widget.database),
         GameInListEdit.routeName: (context) =>
             GameInListEdit(database: widget.database),
@@ -69,12 +69,12 @@ class _AppState extends State<App> with WidgetsBindingObserver {
   @override
   void initState() {
     _isDarkTheme = false;
-    _applyTheme();
+    _loadTheme();
     WidgetsBinding.instance.addObserver(this);
     super.initState();
   }
 
-  _applyTheme() async {
+  _loadTheme() async {
     var prefs = await SharedPreferences.getInstance();
     var isDarkTheme = prefs.getBool('isDarkTheme') ?? _isDarkTheme;
     setState(() {

@@ -20,27 +20,55 @@ class Home extends StatefulWidget {
   _HomeState createState() => _HomeState();
 }
 
+class Tab {
+  final String title;
+  final String label;
+  final Widget widget;
+  final Icon icon;
+
+  Tab(
+      {@required this.title,
+      @required this.label,
+      @required this.widget,
+      @required IconData iconData})
+      : icon = Icon(iconData) {
+    assert(title != null, 'Tab must have name');
+    assert(label != null, 'Tab must have widget');
+    assert(widget != null, 'Tab must have widget');
+    assert(iconData != null, 'Tab must have widget');
+  }
+}
+
 class _HomeState extends State<Home> {
   int _currentIndex;
   bool _isSearching;
   String _search;
 
-  final tabsTitle = [
-    'Game List',
-    'Search',
-    'Games',
-    'Settings',
-  ];
-
   @override
   Widget build(BuildContext context) {
     final tabs = [
-      HomeTab(),
-      SearchTab(database: widget.database, search: _search),
-      GamesTab(database: widget.database, search: _search),
-      SettingsTab(
-          isDarkTheme: widget.isDarkTheme,
-          updateIsDarkTheme: widget.updateTheme) // Settings tab
+      Tab(
+          title: 'Game List',
+          label: 'Home',
+          widget: HomeTab(),
+          iconData: Icons.home_outlined),
+      Tab(
+          title: 'Search',
+          label: 'Search',
+          widget: SearchTab(database: widget.database, search: _search),
+          iconData: Icons.search_outlined),
+      Tab(
+          title: 'Games',
+          label: 'Games',
+          widget: GamesTab(database: widget.database, search: _search),
+          iconData: Icons.games),
+      Tab(
+          title: 'Settings',
+          label: 'Settings',
+          widget: SettingsTab(
+              isDarkTheme: widget.isDarkTheme,
+              updateIsDarkTheme: widget.updateTheme),
+          iconData: Icons.settings),
     ];
     return Scaffold(
       appBar: AppBar(
@@ -56,7 +84,7 @@ class _HomeState extends State<Home> {
                 decoration: InputDecoration(
                     hintText: 'Search', icon: Icon(Icons.search)),
               )
-            : Text(tabsTitle[_currentIndex]),
+            : Text(tabs[_currentIndex].title),
         actions: [
           Visibility(
               visible: _currentIndex == 1,
@@ -72,21 +100,13 @@ class _HomeState extends State<Home> {
                   }))
         ],
       ),
-      body: tabs[_currentIndex],
+      body: tabs[_currentIndex].widget,
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         iconSize: 32,
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home_outlined),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.search_outlined), label: 'Search'),
-          BottomNavigationBarItem(icon: Icon(Icons.games), label: 'Games'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.settings), label: 'Settings'),
-        ],
+        items: tabs
+            .map((e) => BottomNavigationBarItem(icon: e.icon, label: e.label))
+            .toList(),
         onTap: (index) {
           setState(() {
             _currentIndex = index;

@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:game_list/db/dao/game_dao.dart';
 import 'package:game_list/db/database.dart';
 import 'package:game_list/db/model/game.dart';
 
 class GameAdd extends StatefulWidget {
   static const routeName = '/gameAdd';
+  final AppDatabase database;
+
+  const GameAdd({Key key, @required this.database}) : super(key: key);
 
   @override
   _GameAddState createState() => _GameAddState();
@@ -13,10 +17,7 @@ class _GameAddState extends State<GameAdd> {
   final _formKey = GlobalKey<FormState>();
   String _name;
   String _coverUrl;
-
-  final Future<AppDatabase> _database = $FloorAppDatabase
-      .databaseBuilder('game_list.db')
-      .addMigrations([migration1to2]).build();
+  GameDao _gameDao;
 
   @override
   Widget build(BuildContext context) {
@@ -69,9 +70,13 @@ class _GameAddState extends State<GameAdd> {
     );
   }
 
+  @override
+  void initState() {
+    _gameDao = widget.database.gameDao;
+    super.initState();
+  }
+
   void _createGame() async {
-    final database = await _database;
-    var game = Game(null, _name, _coverUrl);
-    database.gameDao.insertObject(game);
+    await _gameDao.insertObject(Game(null, _name, _coverUrl));
   }
 }

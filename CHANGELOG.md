@@ -2,6 +2,8 @@
 ### Added
 - Game in list edit page.
 - CRUD for game in list entity.
+- Refactoring of game app page.
+- Refactoring of home page.
 
 ## [0.10.0] - 2020-02-15
 ### Added
