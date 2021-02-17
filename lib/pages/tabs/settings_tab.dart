@@ -1,12 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:package_info/package_info.dart';
 
-class SettingsTab extends StatelessWidget {
+class SettingsTab extends StatefulWidget {
   final bool isDarkTheme;
   final ValueChanged<bool> updateIsDarkTheme;
 
   const SettingsTab(
       {Key key, @required this.isDarkTheme, @required this.updateIsDarkTheme})
       : super(key: key);
+
+  @override
+  _SettingsTabState createState() => _SettingsTabState();
+}
+
+class _SettingsTabState extends State<SettingsTab> {
+  String _appName;
+  String _version;
 
   @override
   Widget build(BuildContext context) {
@@ -21,18 +30,40 @@ class SettingsTab extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: Column(
               children: [
-                Text('Appearance'),
+                Text(
+                  'Appearance',
+                  style: TextStyle(fontSize: 16),
+                ),
                 SwitchListTile(
                     title: Text('Dark Theme'),
-                    value: isDarkTheme,
+                    value: widget.isDarkTheme,
                     onChanged: (value) {
-                      updateIsDarkTheme(value);
-                    })
+                      widget.updateIsDarkTheme(value);
+                    }),
               ],
             ),
           ),
-        )
+        ),
+        Center(
+          child: Text('$_appName $_version'),
+        ),
       ],
     );
+  }
+
+  _getVersion() async {
+    var packageInfo = await PackageInfo.fromPlatform();
+    setState(() {
+      _appName = packageInfo.appName;
+      _version = packageInfo.version;
+    });
+  }
+
+  @override
+  void initState() {
+    _appName = '';
+    _version = '';
+    _getVersion();
+    super.initState();
   }
 }
