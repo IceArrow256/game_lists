@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:game_list/db/database.dart';
 import 'package:game_list/db/model/game.dart';
+import 'package:game_list/pages/home.dart';
 
 class GameEdit extends StatefulWidget {
   static const routeName = '/gameEdit';
@@ -27,8 +28,8 @@ class _GameEditState extends State<GameEdit> {
           IconButton(
             icon: const Icon(Icons.delete),
             onPressed: () async {
-              _deleteGame(_game);
-              Navigator.pop(context, 'delete');
+              await widget.database.gameDao.deleteGame(_game);
+              Navigator.popUntil(context, ModalRoute.withName(Home.routeName));
             },
           ),
         ],
@@ -36,12 +37,12 @@ class _GameEditState extends State<GameEdit> {
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.check),
-        onPressed: () {
+        onPressed: () async {
           if (_formKey.currentState.validate()) {
             _formKey.currentState.save();
             var game = Game(_game.id, _name, _coverUrl);
-            _updateGame(game);
-            Navigator.pop(context, game);
+            await widget.database.gameDao.updateGame(game);
+            Navigator.pop(context);
           }
         },
       ),
@@ -85,13 +86,5 @@ class _GameEditState extends State<GameEdit> {
   @override
   void initState() {
     super.initState();
-  }
-
-  void _deleteGame(Game game) async {
-    await widget.database.gameDao.deleteGame(game);
-  }
-
-  void _updateGame(Game game) async {
-    await widget.database.gameDao.updateGame(game);
   }
 }

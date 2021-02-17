@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:game_list/db/dao/game_in_list_dao.dart';
 import 'package:game_list/db/database.dart';
+import 'package:game_list/db/model/game_in_list.dart';
+import 'package:game_list/pages/home.dart';
 
 class GameInListEdit extends StatefulWidget {
   static const routeName = '/gameInViewEdit';
@@ -28,7 +30,7 @@ class _GameInListEditState extends State<GameInListEdit> {
             icon: const Icon(Icons.delete),
             onPressed: () async {
               _deleteGameInList();
-              Navigator.pop(context, 'delete');
+              Navigator.popUntil(context, ModalRoute.withName(Home.routeName));
             },
           ),
         ],
@@ -36,12 +38,16 @@ class _GameInListEditState extends State<GameInListEdit> {
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.check),
-        onPressed: () {
+        onPressed: () async {
           if (_formKey.currentState.validate()) {
             _formKey.currentState.save();
-
-            _updateGameInList();
-            Navigator.pop(context, _gameInList);
+            var gameInList = GameInList(
+              _gameInList['id'],
+              _gameInList['gameId'],
+              _gameInList['dateAdded'],
+            );
+            await _gameInListDao.updateObject(gameInList);
+            Navigator.pop(context);
           }
         },
       ),
@@ -100,10 +106,5 @@ class _GameInListEditState extends State<GameInListEdit> {
   void _deleteGameInList() async {
     var object = await _gameInListDao.findByGameId(_gameInList['gameId']);
     await _gameInListDao.deleteObject(object);
-  }
-
-  void _updateGameInList() async {
-    var object = await _gameInListDao.findByGameId(_gameInList['gameId']);
-    await _gameInListDao.updateObject(object);
   }
 }

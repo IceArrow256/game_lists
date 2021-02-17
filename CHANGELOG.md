@@ -1,3 +1,10 @@
+## [0.12.0] - 2020-02-17
+### Added
+- Refactor game edit page.
+- Refactor game view page.
+- Refactor game in list edit page.
+- Refactor game in list view page.
+
 ## [0.11.0] - 2020-02-16
 ### Added
 - Game in list edit page.

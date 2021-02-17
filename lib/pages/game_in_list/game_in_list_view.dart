@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:game_list/db/dao/game_dao.dart';
 import 'package:game_list/db/dao/game_in_list_dao.dart';
 import 'package:game_list/db/database.dart';
 import 'package:game_list/pages/game_in_list/game_in_list_edit.dart';
@@ -15,36 +16,28 @@ class GameInListView extends StatefulWidget {
 
 class _GameInListViewState extends State<GameInListView> {
   Map<String, Object> _gameInList;
+  GameDao _gameDao;
   GameInListDao _gameInListDao;
 
   @override
   Widget build(BuildContext context) {
-    final Map<String, Object> gameInList =
-        _gameInList ?? ModalRoute.of(context).settings.arguments;
-    var date = gameInList['dateAdded'] as DateTime;
+    _gameInList = _gameInList ?? ModalRoute.of(context).settings.arguments;
+    var date = _gameInList['dateAdded'] as DateTime;
     return Scaffold(
       appBar: AppBar(
         actions: [
           IconButton(
             icon: Icon(Icons.edit),
             onPressed: () async {
-              var _result = (await Navigator.pushNamed(
-                  context, GameInListEdit.routeName,
-                  arguments: gameInList));
-              if (_result.runtimeType == Map) {
-                setState(() {
-                  _gameInList = _result as Map<String, Object>;
-                });
-              } else if (_result.runtimeType == String) {
-                if (_result == 'delete') {
-                  Navigator.pop(context);
-                }
-              }
+              await Navigator.pushNamed(context, GameInListEdit.routeName,
+                  arguments: _gameInList);
+              await _getGameInListForView();
+              setState(() {});
             },
           ),
         ],
         title: Text(
-          gameInList['name'],
+          _gameInList['name'],
           overflow: TextOverflow.fade,
         ),
       ),
@@ -52,7 +45,7 @@ class _GameInListViewState extends State<GameInListView> {
           child: Icon(Icons.delete),
           onPressed: () async {
             var object =
-                await _gameInListDao.findByGameId(gameInList['gameId']);
+                await _gameInListDao.findByGameId(_gameInList['gameId']);
             await _gameInListDao.deleteObject(object);
             setState(() {});
             Navigator.pop(context);
@@ -65,7 +58,7 @@ class _GameInListViewState extends State<GameInListView> {
             ClipRRect(
               borderRadius: BorderRadius.circular(2.0),
               child: Image.network(
-                gameInList['coverUrl'],
+                _gameInList['coverUrl'],
                 width: 128,
                 height: 171,
                 fit: BoxFit.fill,
@@ -78,7 +71,7 @@ class _GameInListViewState extends State<GameInListView> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      gameInList['name'],
+                      _gameInList['name'],
                       style: TextStyle(fontSize: 20),
                     ),
                     Text(
@@ -94,8 +87,21 @@ class _GameInListViewState extends State<GameInListView> {
     );
   }
 
+  _getGameInListForView() async {
+    var gameInList = await _gameInListDao.findByGameId(_gameInList['gameId']);
+    var game = await _gameDao.findById(_gameInList['gameId']);
+    _gameInList = {
+      'id': gameInList.id,
+      'gameId': game.id,
+      'name': game.name,
+      'coverUrl': game.coverUrl,
+      'dateAdded': gameInList.dateAdded,
+    };
+  }
+
   @override
   void initState() {
+    _gameDao = widget.database.gameDao;
     _gameInListDao = widget.database.gameInListDao;
     super.initState();
   }
