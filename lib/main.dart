@@ -15,7 +15,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final database = await $FloorAppDatabase
       .databaseBuilder('game_list.db')
-      .addMigrations([migration1to2, migration2to3]).build();
+      .addMigrations([migration1to2, migration2to3, migration3to4]).build();
   runApp(App(database: database));
 }
 

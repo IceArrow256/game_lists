@@ -1,3 +1,8 @@
+## [0.13.0] - 2020-03-04
+### Added
+- Status for game in list.
+- Update dependencies.
+
 ## [0.12.0] - 2020-02-17
 ### Added
 - Refactor game edit page.

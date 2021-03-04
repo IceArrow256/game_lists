@@ -67,7 +67,7 @@ class _$AppDatabase extends AppDatabase {
   Future<sqflite.Database> open(String path, List<Migration> migrations,
       [Callback callback]) async {
     final databaseOptions = sqflite.OpenDatabaseOptions(
-      version: 3,
+      version: 4,
       onConfigure: (database) async {
         await database.execute('PRAGMA foreign_keys = ON');
       },
@@ -84,7 +84,7 @@ class _$AppDatabase extends AppDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `Game` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT NOT NULL, `cover_url` TEXT)');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `GameInList` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `game_id` INTEGER NOT NULL, `date_added` INTEGER NOT NULL, FOREIGN KEY (`game_id`) REFERENCES `Game` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION)');
+            'CREATE TABLE IF NOT EXISTS `GameInList` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `game_id` INTEGER NOT NULL, `date_added` INTEGER NOT NULL, `status` INTEGER NOT NULL, FOREIGN KEY (`game_id`) REFERENCES `Game` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION)');
         await database.execute(
             'CREATE UNIQUE INDEX `index_GameInList_game_id` ON `GameInList` (`game_id`)');
 
@@ -215,7 +215,8 @@ class _$GameInListDao extends GameInListDao {
             (GameInList item) => <String, dynamic>{
                   'id': item.id,
                   'game_id': item.gameId,
-                  'date_added': _dateTimeConverter.encode(item.dateAdded)
+                  'date_added': _dateTimeConverter.encode(item.dateAdded),
+                  'status': _statusConverter.encode(item.status)
                 }),
         _gameInListUpdateAdapter = UpdateAdapter(
             database,
@@ -224,7 +225,8 @@ class _$GameInListDao extends GameInListDao {
             (GameInList item) => <String, dynamic>{
                   'id': item.id,
                   'game_id': item.gameId,
-                  'date_added': _dateTimeConverter.encode(item.dateAdded)
+                  'date_added': _dateTimeConverter.encode(item.dateAdded),
+                  'status': _statusConverter.encode(item.status)
                 }),
         _gameInListDeletionAdapter = DeletionAdapter(
             database,
@@ -233,7 +235,8 @@ class _$GameInListDao extends GameInListDao {
             (GameInList item) => <String, dynamic>{
                   'id': item.id,
                   'game_id': item.gameId,
-                  'date_added': _dateTimeConverter.encode(item.dateAdded)
+                  'date_added': _dateTimeConverter.encode(item.dateAdded),
+                  'status': _statusConverter.encode(item.status)
                 });
 
   final sqflite.DatabaseExecutor database;
@@ -254,7 +257,8 @@ class _$GameInListDao extends GameInListDao {
         mapper: (Map<String, dynamic> row) => GameInList(
             row['id'] as int,
             row['game_id'] as int,
-            _dateTimeConverter.decode(row['date_added'] as int)));
+            _dateTimeConverter.decode(row['date_added'] as int),
+            _statusConverter.decode(row['status'] as int)));
   }
 
   @override
@@ -264,7 +268,8 @@ class _$GameInListDao extends GameInListDao {
         mapper: (Map<String, dynamic> row) => GameInList(
             row['id'] as int,
             row['game_id'] as int,
-            _dateTimeConverter.decode(row['date_added'] as int)));
+            _dateTimeConverter.decode(row['date_added'] as int),
+            _statusConverter.decode(row['status'] as int)));
   }
 
   @override
@@ -293,3 +298,4 @@ class _$GameInListDao extends GameInListDao {
 
 // ignore_for_file: unused_element
 final _dateTimeConverter = DateTimeConverter();
+final _statusConverter = StatusConverter();

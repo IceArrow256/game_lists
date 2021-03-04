@@ -11,7 +11,7 @@ import 'package:sqflite/sqflite.dart' as sqflite;
 part 'database.g.dart'; // the generated code will be there
 
 final migration1to2 = Migration(1, 2, (database) async {
-  await database.execute('ALTER TABLE game ADD COLUMN cover_url TEXT');
+  await database.execute('ALTER TABLE Game ADD COLUMN cover_url TEXT');
 });
 
 final migration2to3 = Migration(2, 3, (database) async {
@@ -21,8 +21,13 @@ final migration2to3 = Migration(2, 3, (database) async {
       'CREATE UNIQUE INDEX `index_GameInList_game_id` ON `GameInList` (`game_id`)');
 });
 
-@TypeConverters([DateTimeConverter])
-@Database(version: 3, entities: [Game, GameInList])
+final migration3to4 = Migration(3, 4, (database) async {
+  await database
+      .execute('ALTER TABLE GameInList ADD COLUMN status INTEGER NOT NULL');
+});
+
+@TypeConverters([DateTimeConverter, StatusConverter])
+@Database(version: 4, entities: [Game, GameInList])
 abstract class AppDatabase extends FloorDatabase {
   GameDao get gameDao;
   GameInListDao get gameInListDao;

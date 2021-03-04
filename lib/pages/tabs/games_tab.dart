@@ -105,6 +105,7 @@ class _GamesTabState extends State<GamesTab> {
         'name': game.name,
         'coverUrl': game.coverUrl,
         'dateAdded': gameInList.dateAdded,
+        'status': gameInList.status,
       });
     }
     return objects;

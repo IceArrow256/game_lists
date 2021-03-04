@@ -57,7 +57,7 @@ class _GameViewState extends State<GameView> {
             var gameInList = await _gameInListDao.findByGameId(_game.id);
             if (gameInList == null) {
               var now = DateTime.now();
-              var gameInList = GameInList(null, _game.id, now);
+              var gameInList = GameInList(null, _game.id, now, Status.inbox);
               await _gameInListDao.insertObject(gameInList);
               setState(() {});
             } else {

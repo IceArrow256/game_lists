@@ -42,10 +42,10 @@ class _GameInListEditState extends State<GameInListEdit> {
           if (_formKey.currentState.validate()) {
             _formKey.currentState.save();
             var gameInList = GameInList(
-              _gameInList['id'],
-              _gameInList['gameId'],
-              _gameInList['dateAdded'],
-            );
+                _gameInList['id'],
+                _gameInList['gameId'],
+                _gameInList['dateAdded'],
+                _gameInList['status']);
             await _gameInListDao.updateObject(gameInList);
             Navigator.pop(context);
           }
