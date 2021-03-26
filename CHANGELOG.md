@@ -1,3 +1,9 @@
+## [1.0.0] - 2020-03-26
+### Added
+- Start remaking the app with accumulated experience.
+- Rename project from game_list to game_lists.
+
+
 ## [0.13.0] - 2020-03-04
 ### Added
 - Status for game in list.
