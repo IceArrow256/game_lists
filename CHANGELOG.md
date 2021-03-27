@@ -1,3 +1,7 @@
+## [1.1.0] - 2020-03-27
+### Added
+- Database with all basic entities.
+
 ## [1.0.0] - 2020-03-26
 ### Added
 - Start remaking the app with accumulated experience.

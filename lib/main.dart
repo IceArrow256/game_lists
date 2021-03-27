@@ -1,10 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:game_lists/database/database.dart';
 
-void main() {
-  runApp(GameLists());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final database = await $FloorGameListsDatabase
+      .databaseBuilder('game_lists_database.db')
+      .build();
+  runApp(GameLists(database: database));
 }
 
-class GameLists extends StatelessWidget {
+class GameLists extends StatefulWidget {
+  const GameLists({Key? key, this.database}) : super(key: key);
+
+  final GameListsDatabase? database;
+
+  @override
+  _GameListsState createState() => _GameListsState();
+}
+
+class _GameListsState extends State<GameLists> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -12,29 +26,28 @@ class GameLists extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.red,
       ),
-      home: MyHomePage(title: 'Game Lists'),
+      home: HomePage(title: 'Game Lists'),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+class HomePage extends StatefulWidget {
+  HomePage({Key? key, this.title}) : super(key: key);
 
-  final String title;
+  final String? title;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _HomePageState createState() => _HomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text(widget.title!),
       ),
-      body: Center(
-      ),
+      body: Center(),
     );
   }
 }
