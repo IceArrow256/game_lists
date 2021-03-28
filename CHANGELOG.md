@@ -1,3 +1,16 @@
+## [1.2.0] - 2020-03-28
+### Added
+- Main Page.
+- Bottom Navigation Bar for Main Page.
+- Bottom Navigation Bar Items.
+- Drawer for Main Page.
+- About Page.
+- Settings Page.
+
+### Changed
+- Navigation Bar color.
+- Status Bar color.
+
 ## [1.1.0] - 2020-03-27
 ### Added
 - Database with all basic entities.
