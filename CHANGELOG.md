@@ -1,3 +1,7 @@
+## [1.3.0] - 2020-03-29
+### Added
+- Tabs For Games In Navigation Bar.
+
 ## [1.2.0] - 2020-03-28
 ### Added
 - Main Page.

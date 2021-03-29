@@ -54,61 +54,74 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        title: Text(_widgetOptions.elementAt(_selectedIndex).title),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: _widgetOptions
-            .map((e) => BottomNavigationBarItem(icon: e.icon, label: e.label))
-            .toList(),
-        currentIndex: _selectedIndex,
-        type: BottomNavigationBarType.fixed,
-        selectedFontSize: 12,
-        onTap: _onItemTapped,
-        elevation: 0,
-      ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            DrawerHeader(
-              child: Row(
-                children: [
-                  Text(
-                    'Game Lists',
-                    style: TextStyle(fontSize: 24),
-                  ),
-                ],
-              ),
-              decoration: BoxDecoration(
-                color: Colors.red,
-              ),
-            ),
-            ListTile(
-              title: Text('Settings'),
-              onTap: () {
-                Navigator.pushNamed(context, '/settings');
-              },
-            ),
-            ListTile(
-              title: Text('About'),
-              onTap: () {
-                Navigator.pushNamed(context, '/about');
-              },
-            ),
-            ListTile(
-              title: Text('Exit'),
-              onTap: () {
-                SystemNavigator.pop();
-              },
-            ),
-          ],
+    return DefaultTabController(
+      length: 5,
+      child: Scaffold(
+        appBar: AppBar(
+          elevation: 0,
+          title: Text(_widgetOptions.elementAt(_selectedIndex).title),
+          bottom:  _selectedIndex == 2 ? TabBar(
+            isScrollable: true,
+            tabs: [
+              Tab(text: 'Inbox'),
+              Tab(text: 'Playing'),
+              Tab(text: 'Pause'),
+              Tab(text: 'Completed'),
+              Tab(text: 'Dropped')
+            ],
+          ) : null,
         ),
-      ),
-      body: Center(
-        child: _widgetOptions.elementAt(_selectedIndex).widget,
+        bottomNavigationBar: BottomNavigationBar(
+          items: _widgetOptions
+              .map((e) => BottomNavigationBarItem(icon: e.icon, label: e.label))
+              .toList(),
+          currentIndex: _selectedIndex,
+          type: BottomNavigationBarType.fixed,
+          selectedFontSize: 12,
+          onTap: _onItemTapped,
+          elevation: 0,
+        ),
+        drawer: Drawer(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: <Widget>[
+              DrawerHeader(
+                child: Row(
+                  children: [
+                    Text(
+                      'Game Lists',
+                      style: TextStyle(fontSize: 24),
+                    ),
+                  ],
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.red,
+                ),
+              ),
+              ListTile(
+                title: Text('Settings'),
+                onTap: () {
+                  Navigator.pushNamed(context, '/settings');
+                },
+              ),
+              ListTile(
+                title: Text('About'),
+                onTap: () {
+                  Navigator.pushNamed(context, '/about');
+                },
+              ),
+              ListTile(
+                title: Text('Exit'),
+                onTap: () {
+                  SystemNavigator.pop();
+                },
+              ),
+            ],
+          ),
+        ),
+        body: Center(
+          child: _widgetOptions.elementAt(_selectedIndex).widget,
+        ),
       ),
     );
   }
