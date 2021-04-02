@@ -57,19 +57,28 @@ class _MainPageState extends State<MainPage> {
     return DefaultTabController(
       length: 5,
       child: Scaffold(
+        floatingActionButton: _selectedIndex == 1
+            ? FloatingActionButton(
+                child: Icon(Icons.add),
+                onPressed: () async {
+                  Navigator.pushNamed(context, '/adding_game');
+                })
+            : null,
         appBar: AppBar(
           elevation: 0,
           title: Text(_widgetOptions.elementAt(_selectedIndex).title),
-          bottom:  _selectedIndex == 2 ? TabBar(
-            isScrollable: true,
-            tabs: [
-              Tab(text: 'Inbox'),
-              Tab(text: 'Playing'),
-              Tab(text: 'Pause'),
-              Tab(text: 'Completed'),
-              Tab(text: 'Dropped')
-            ],
-          ) : null,
+          bottom: _selectedIndex == 2
+              ? TabBar(
+                  isScrollable: true,
+                  tabs: [
+                    Tab(text: 'Inbox'),
+                    Tab(text: 'Playing'),
+                    Tab(text: 'Pause'),
+                    Tab(text: 'Completed'),
+                    Tab(text: 'Dropped')
+                  ],
+                )
+              : null,
         ),
         bottomNavigationBar: BottomNavigationBar(
           items: _widgetOptions

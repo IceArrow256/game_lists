@@ -1,3 +1,8 @@
+## [1.4.0] - 2020-04-02
+### Added
+- Adding Game Page.
+- Basic functionality for Adding Game Page.
+
 ## [1.3.0] - 2020-03-29
 ### Added
 - Tabs For Games In Navigation Bar.
