@@ -19,13 +19,13 @@ import 'package:game_lists/database/entities/series.dart';
 )
 class GameSeries {
   @PrimaryKey(autoGenerate: true)
-  final int? id;
+  final int id;
 
   @ColumnInfo(name: 'game_id')
-  final int? gameId;
+  final int gameId;
 
   @ColumnInfo(name: 'series_id')
-  final int? seriesId;
+  final int seriesId;
 
   GameSeries(this.id, this.gameId, this.seriesId);
 }

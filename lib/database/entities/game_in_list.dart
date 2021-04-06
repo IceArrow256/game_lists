@@ -4,28 +4,28 @@ import 'package:game_lists/database/entities/list_type.dart';
 
 @Entity(tableName: 'game_in_list', foreignKeys: [
   ForeignKey(
-    childColumns: ['list_type_id'],
-    parentColumns: ['id'],
-    entity: ListType,
-  ),
-  ForeignKey(
     childColumns: ['game_id'],
     parentColumns: ['id'],
     entity: Game,
+  ),
+  ForeignKey(
+    childColumns: ['list_type_id'],
+    parentColumns: ['id'],
+    entity: ListType,
   )
 ])
 class GameInList {
   @PrimaryKey(autoGenerate: true)
-  final int? id;
-
-  @ColumnInfo(name: 'list_type_id')
-  final int? listTypeId;
+  final int id;
 
   @ColumnInfo(name: 'game_id')
-  final int? gameId;
+  final int gameId;
+
+  @ColumnInfo(name: 'list_type_id')
+  final int listTypeId;
 
   @ColumnInfo(name: 'create_time')
-  final DateTime? createTime;
+  final DateTime createTime;
 
   @ColumnInfo(name: 'score')
   final int? score;

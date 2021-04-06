@@ -1,3 +1,7 @@
+## [1.5.0] - 2020-04-06
+### Changed
+- Redesign the Database.
+
 ## [1.4.0] - 2020-04-02
 ### Added
 - Adding Game Page.

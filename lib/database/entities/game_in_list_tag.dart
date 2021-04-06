@@ -16,13 +16,13 @@ import 'package:game_lists/database/entities/tag.dart';
 ])
 class GameInListTag {
   @PrimaryKey(autoGenerate: true)
-  final int? id;
+  final int id;
 
   @ColumnInfo(name: 'game_in_list_id')
-  final int? gameInListId;
+  final int gameInListId;
 
   @ColumnInfo(name: 'tag_id')
-  final int? tagId;
+  final int tagId;
 
   GameInListTag(this.id, this.gameInListId, this.tagId);
 }

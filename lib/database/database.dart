@@ -7,7 +7,7 @@ import 'package:game_lists/database/dao/game_dao.dart';
 import 'package:game_lists/database/dao/game_developer_dao.dart';
 import 'package:game_lists/database/dao/game_in_list_dao.dart';
 import 'package:game_lists/database/dao/game_in_list_tag_dao.dart';
-import 'package:game_lists/database/dao/game_release_date_dao.dart';
+import 'package:game_lists/database/dao/game_platform.dart';
 import 'package:game_lists/database/dao/game_series_dao.dart';
 import 'package:game_lists/database/dao/game_tag_dao.dart';
 import 'package:game_lists/database/dao/list_type_dao.dart';
@@ -22,7 +22,7 @@ import 'package:game_lists/database/entities/game.dart';
 import 'package:game_lists/database/entities/game_developer.dart';
 import 'package:game_lists/database/entities/game_in_list.dart';
 import 'package:game_lists/database/entities/game_in_list_tag.dart';
-import 'package:game_lists/database/entities/game_release_date.dart';
+import 'package:game_lists/database/entities/game_platform.dart';
 import 'package:game_lists/database/entities/game_series.dart';
 import 'package:game_lists/database/entities/game_tag.dart';
 import 'package:game_lists/database/entities/list_type.dart';
@@ -34,7 +34,7 @@ import 'package:sqflite/sqflite.dart' as sqflite;
 
 part 'database.g.dart';
 
-@TypeConverters([DateTimeConverter])
+@TypeConverters([DateTimeConverter, DateTimeConverterNullable])
 @Database(version: 1, entities: [
   Country,
   Developer,
@@ -42,7 +42,7 @@ part 'database.g.dart';
   GameDeveloper,
   GameInList,
   GameInListTag,
-  GameReleaseDate,
+  GamePlatform,
   GameSeries,
   GameTag,
   ListType,
@@ -64,7 +64,7 @@ abstract class GameListsDatabase extends FloorDatabase {
 
   GameInListTagDao get gameInListTagDao;
 
-  GameReleaseDateDao get gameReleaseDateDao;
+  GamePlatformDao get gamePlatformDao;
 
   GameSeriesDao get gameSeriesDao;
 

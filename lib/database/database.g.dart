@@ -72,7 +72,7 @@ class _$GameListsDatabase extends GameListsDatabase {
 
   GameInListTagDao? _gameInListTagDaoInstance;
 
-  GameReleaseDateDao? _gameReleaseDateDaoInstance;
+  GamePlatformDao? _gamePlatformDaoInstance;
 
   GameSeriesDao? _gameSeriesDaoInstance;
 
@@ -106,33 +106,33 @@ class _$GameListsDatabase extends GameListsDatabase {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `country` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT)');
+            'CREATE TABLE IF NOT EXISTS `country` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL)');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `developer` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `create_time` INTEGER, `country_id` INTEGER, `image` BLOB, `name` TEXT, FOREIGN KEY (`country_id`) REFERENCES `country` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION)');
+            'CREATE TABLE IF NOT EXISTS `developer` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `country_id` INTEGER, `name` TEXT, FOREIGN KEY (`country_id`) REFERENCES `country` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION)');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `game` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `create_time` INTEGER, `description` TEXT, `image` BLOB, `name` TEXT)');
+            'CREATE TABLE IF NOT EXISTS `game` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `image` BLOB, `description` TEXT)');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `game_developer` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `developer_id` INTEGER, `game_id` INTEGER, FOREIGN KEY (`game_id`) REFERENCES `game` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION, FOREIGN KEY (`developer_id`) REFERENCES `developer` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION)');
+            'CREATE TABLE IF NOT EXISTS `game_developer` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `game_id` INTEGER NOT NULL, `developer_id` INTEGER NOT NULL, `is_main` INTEGER NOT NULL, FOREIGN KEY (`game_id`) REFERENCES `game` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION, FOREIGN KEY (`developer_id`) REFERENCES `developer` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION)');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `game_in_list` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `list_type_id` INTEGER, `game_id` INTEGER, `create_time` INTEGER, `score` INTEGER, `notes` TEXT, FOREIGN KEY (`list_type_id`) REFERENCES `list_type` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION, FOREIGN KEY (`game_id`) REFERENCES `game` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION)');
+            'CREATE TABLE IF NOT EXISTS `game_in_list` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `game_id` INTEGER NOT NULL, `list_type_id` INTEGER NOT NULL, `create_time` INTEGER NOT NULL, `score` INTEGER, `notes` TEXT, FOREIGN KEY (`game_id`) REFERENCES `game` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION, FOREIGN KEY (`list_type_id`) REFERENCES `list_type` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION)');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `game_in_list_tag` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `game_in_list_id` INTEGER, `tag_id` INTEGER, FOREIGN KEY (`game_in_list_id`) REFERENCES `game_in_list` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION, FOREIGN KEY (`tag_id`) REFERENCES `tag` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION)');
+            'CREATE TABLE IF NOT EXISTS `game_in_list_tag` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `game_in_list_id` INTEGER NOT NULL, `tag_id` INTEGER NOT NULL, FOREIGN KEY (`game_in_list_id`) REFERENCES `game_in_list` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION, FOREIGN KEY (`tag_id`) REFERENCES `tag` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION)');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `game_release_date` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `date` INTEGER, `game_id` INTEGER, `platform_id` INTEGER, FOREIGN KEY (`game_id`) REFERENCES `game` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION, FOREIGN KEY (`platform_id`) REFERENCES `platform` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION)');
+            'CREATE TABLE IF NOT EXISTS `game_platform` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `game_id` INTEGER NOT NULL, `platform_id` INTEGER NOT NULL, `date` INTEGER NOT NULL, FOREIGN KEY (`game_id`) REFERENCES `game` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION, FOREIGN KEY (`platform_id`) REFERENCES `platform` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION)');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `game_series` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `game_id` INTEGER, `series_id` INTEGER, FOREIGN KEY (`game_id`) REFERENCES `game` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION, FOREIGN KEY (`series_id`) REFERENCES `series` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION)');
+            'CREATE TABLE IF NOT EXISTS `game_series` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `game_id` INTEGER NOT NULL, `series_id` INTEGER NOT NULL, FOREIGN KEY (`game_id`) REFERENCES `game` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION, FOREIGN KEY (`series_id`) REFERENCES `series` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION)');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `game_tag` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `game_id` INTEGER, `tag_id` INTEGER, FOREIGN KEY (`game_id`) REFERENCES `game` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION, FOREIGN KEY (`tag_id`) REFERENCES `tag` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION)');
+            'CREATE TABLE IF NOT EXISTS `game_tag` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `game_id` INTEGER NOT NULL, `tag_id` INTEGER NOT NULL, FOREIGN KEY (`game_id`) REFERENCES `game` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION, FOREIGN KEY (`tag_id`) REFERENCES `tag` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION)');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `list_type` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT)');
+            'CREATE TABLE IF NOT EXISTS `list_type` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL)');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `platform` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `create_time` INTEGER, `image` BLOB, `name` TEXT)');
+            'CREATE TABLE IF NOT EXISTS `platform` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL)');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `series` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `create_time` INTEGER, `image` BLOB, `name` TEXT)');
+            'CREATE TABLE IF NOT EXISTS `series` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL)');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `tag` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT)');
+            'CREATE TABLE IF NOT EXISTS `tag` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL)');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `walkthrough` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `end` INTEGER, `game_in_list_id` INTEGER, `start` INTEGER, FOREIGN KEY (`game_in_list_id`) REFERENCES `game_in_list` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION)');
+            'CREATE TABLE IF NOT EXISTS `walkthrough` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `game_in_list_id` INTEGER, `start` INTEGER, `end` INTEGER, `time_played` INTEGER, FOREIGN KEY (`game_in_list_id`) REFERENCES `game_in_list` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION)');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -173,9 +173,9 @@ class _$GameListsDatabase extends GameListsDatabase {
   }
 
   @override
-  GameReleaseDateDao get gameReleaseDateDao {
-    return _gameReleaseDateDaoInstance ??=
-        _$GameReleaseDateDao(database, changeListener);
+  GamePlatformDao get gamePlatformDao {
+    return _gamePlatformDaoInstance ??=
+        _$GamePlatformDao(database, changeListener);
   }
 
   @override
@@ -242,9 +242,7 @@ class _$DeveloperDao extends DeveloperDao {
             'developer',
             (Developer item) => <String, Object?>{
                   'id': item.id,
-                  'create_time': _dateTimeConverter.encode(item.createTime),
                   'country_id': item.countryId,
-                  'image': item.image,
                   'name': item.name
                 });
 
@@ -268,10 +266,9 @@ class _$GameDao extends GameDao {
             'game',
             (Game item) => <String, Object?>{
                   'id': item.id,
-                  'create_time': _dateTimeConverter.encode(item.createTime),
-                  'description': item.description,
+                  'name': item.name,
                   'image': item.image,
-                  'name': item.name
+                  'description': item.description
                 });
 
   final sqflite.DatabaseExecutor database;
@@ -293,8 +290,9 @@ class _$GameDeveloperDao extends GameDeveloperDao {
             'game_developer',
             (GameDeveloper item) => <String, Object?>{
                   'id': item.id,
+                  'game_id': item.gameId,
                   'developer_id': item.developerId,
-                  'game_id': _dateTimeConverter.encode(item.gameId)
+                  'is_main': item.isMain ? 1 : 0
                 });
 
   final sqflite.DatabaseExecutor database;
@@ -317,8 +315,8 @@ class _$GameInListDao extends GameInListDao {
             'game_in_list',
             (GameInList item) => <String, Object?>{
                   'id': item.id,
-                  'list_type_id': item.listTypeId,
                   'game_id': item.gameId,
+                  'list_type_id': item.listTypeId,
                   'create_time': _dateTimeConverter.encode(item.createTime),
                   'score': item.score,
                   'notes': item.notes
@@ -361,27 +359,27 @@ class _$GameInListTagDao extends GameInListTagDao {
   }
 }
 
-class _$GameReleaseDateDao extends GameReleaseDateDao {
-  _$GameReleaseDateDao(this.database, this.changeListener)
-      : _gameReleaseDateInsertionAdapter = InsertionAdapter(
+class _$GamePlatformDao extends GamePlatformDao {
+  _$GamePlatformDao(this.database, this.changeListener)
+      : _gamePlatformInsertionAdapter = InsertionAdapter(
             database,
-            'game_release_date',
-            (GameReleaseDate item) => <String, Object?>{
+            'game_platform',
+            (GamePlatform item) => <String, Object?>{
                   'id': item.id,
-                  'date': _dateTimeConverter.encode(item.date),
                   'game_id': item.gameId,
-                  'platform_id': item.platformId
+                  'platform_id': item.platformId,
+                  'date': _dateTimeConverter.encode(item.date)
                 });
 
   final sqflite.DatabaseExecutor database;
 
   final StreamController<String> changeListener;
 
-  final InsertionAdapter<GameReleaseDate> _gameReleaseDateInsertionAdapter;
+  final InsertionAdapter<GamePlatform> _gamePlatformInsertionAdapter;
 
   @override
-  Future<void> insertGameReleaseDate(GameReleaseDate gameReleaseDate) async {
-    await _gameReleaseDateInsertionAdapter.insert(
+  Future<void> insertGamePlatform(GamePlatform gameReleaseDate) async {
+    await _gamePlatformInsertionAdapter.insert(
         gameReleaseDate, OnConflictStrategy.abort);
   }
 }
@@ -458,12 +456,8 @@ class _$PlatformDao extends PlatformDao {
       : _platformInsertionAdapter = InsertionAdapter(
             database,
             'platform',
-            (Platform item) => <String, Object?>{
-                  'id': item.id,
-                  'create_time': _dateTimeConverter.encode(item.createTime),
-                  'image': item.image,
-                  'name': item.name
-                });
+            (Platform item) =>
+                <String, Object?>{'id': item.id, 'name': item.name});
 
   final sqflite.DatabaseExecutor database;
 
@@ -482,12 +476,8 @@ class _$SeriesDao extends SeriesDao {
       : _seriesInsertionAdapter = InsertionAdapter(
             database,
             'series',
-            (Series item) => <String, Object?>{
-                  'id': item.id,
-                  'create_time': _dateTimeConverter.encode(item.createTime),
-                  'image': item.image,
-                  'name': item.name
-                });
+            (Series item) =>
+                <String, Object?>{'id': item.id, 'name': item.name});
 
   final sqflite.DatabaseExecutor database;
 
@@ -525,9 +515,10 @@ class _$WalkthroughDao extends WalkthroughDao {
             'walkthrough',
             (Walkthrough item) => <String, Object?>{
                   'id': item.id,
-                  'end': _dateTimeConverter.encode(item.end),
                   'game_in_list_id': item.gameInListId,
-                  'start': _dateTimeConverter.encode(item.start)
+                  'start': _dateTimeConverterNullable.encode(item.start),
+                  'end': _dateTimeConverterNullable.encode(item.end),
+                  'time_played': item.timePlayed
                 });
 
   final sqflite.DatabaseExecutor database;
@@ -545,3 +536,4 @@ class _$WalkthroughDao extends WalkthroughDao {
 
 // ignore_for_file: unused_element
 final _dateTimeConverter = DateTimeConverter();
+final _dateTimeConverterNullable = DateTimeConverterNullable();

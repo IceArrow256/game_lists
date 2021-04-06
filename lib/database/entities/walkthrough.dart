@@ -12,14 +12,17 @@ class Walkthrough {
   @PrimaryKey(autoGenerate: true)
   final int? id;
 
-  @ColumnInfo(name: 'end')
-  final DateTime? end;
-
   @ColumnInfo(name: 'game_in_list_id')
   final int? gameInListId;
 
   @ColumnInfo(name: 'start')
   final DateTime? start;
 
-  Walkthrough(this.id, this.end, this.gameInListId, this.start);
+  @ColumnInfo(name: 'end')
+  final DateTime? end;
+
+  @ColumnInfo(name: 'time_played')
+  final int? timePlayed;
+
+  Walkthrough(this.id, this.gameInListId, this.start, this.end, this.timePlayed);
 }

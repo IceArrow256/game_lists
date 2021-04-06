@@ -16,13 +16,16 @@ import 'package:game_lists/database/entities/game.dart';
 ])
 class GameDeveloper {
   @PrimaryKey(autoGenerate: true)
-  final int? id;
-
-  @ColumnInfo(name: 'developer_id')
-  final int? developerId;
+  final int id;
 
   @ColumnInfo(name: 'game_id')
-  final DateTime? gameId;
+  final int gameId;
 
-  GameDeveloper(this.id, this.gameId, this.developerId);
+  @ColumnInfo(name: 'developer_id')
+  final int developerId;
+
+  @ColumnInfo(name: 'is_main')
+  final bool isMain;
+
+  GameDeveloper(this.id, this.gameId, this.developerId, this.isMain);
 }
