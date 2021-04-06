@@ -1,6 +1,10 @@
 ## [1.5.0] - 2020-04-06
 ### Changed
 - Redesign the Database.
+- Redesign the Main Page and the Navigation Bar.
+
+### Removed
+- Home in Navigation Bar.
 
 ## [1.4.0] - 2020-04-02
 ### Added
