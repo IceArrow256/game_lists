@@ -2,6 +2,7 @@
 ### Changed
 - Redesign the Database.
 - Redesign the Main Page and the Navigation Bar.
+- Redesign the Game Page.
 
 ### Removed
 - Home in Navigation Bar.

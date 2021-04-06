@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:game_lists/database/database.dart';
 import 'package:game_lists/pages/about_page.dart';
-import 'package:game_lists/pages/adding_game_page.dart';
+import 'package:game_lists/pages/game_page.dart';
 import 'package:game_lists/pages/main_page.dart';
 import 'package:game_lists/pages/settings_page.dart';
 
@@ -29,7 +29,7 @@ class _GameListsState extends State<GameLists> {
         '/': (context) => MainPage(database: widget.database),
         '/settings': (context) => SettingsPage(),
         '/about': (context) => AboutPage(),
-        '/adding_game': (context) => AddingGamePage()
+        '/game': (context) => GamePage()
       },
       debugShowCheckedModeBanner: false,
     );

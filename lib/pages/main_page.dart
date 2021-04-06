@@ -32,7 +32,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
           floatingActionButton: FloatingActionButton(
               child: Icon(Icons.add),
               onPressed: () async {
-                Navigator.pushNamed(context, '/adding_game');
+                Navigator.pushNamed(context, '/game');
               }),
           widget: SearchWidgetOption()),
       WidgetOption(
