@@ -19,8 +19,8 @@ class _GamePageState extends State<GamePage> {
     final pickedFile = await _picker.getImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       _image = await pickedFile.readAsBytes();
-      var finalW = 154;
-      var finalH = 216;
+      var finalW = 308;
+      var finalH = 432;
       var image = Img.decodeImage(_image!)!;
       var coeff = finalW / image.width;
       coeff = image.height * coeff < finalH ? finalH / image.height : coeff;
@@ -38,7 +38,7 @@ class _GamePageState extends State<GamePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Adding Game'),
+        title: Text('Game'),
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.check),
@@ -61,9 +61,9 @@ class _GamePageState extends State<GamePage> {
                   onTap: _getImage,
                   child: _image == null
                       ? Image.network(
-                          'https://place-hold.it/154x216',
+                          'https://place-hold.it/308x432',
                         )
-                      : Image.memory(_image!),
+                      : Image.memory(_image!, scale: 2),
                 ),
               ),
               TextFormField(
@@ -89,7 +89,7 @@ class _GamePageState extends State<GamePage> {
                 ),
                 initialValue: 'cavia inc., Toylogic',
                 onTap: () {
-                  print('Test');
+                  Navigator.pushNamed(context, '/developer');
                 },
                 readOnly: true,
               ),
@@ -102,7 +102,7 @@ class _GamePageState extends State<GamePage> {
                 ),
                 initialValue: 'Drakengard, Nier',
                 onTap: () {
-                  print('Test');
+                  Navigator.pushNamed(context, '/series');
                 },
                 readOnly: true,
               ),
@@ -115,7 +115,7 @@ class _GamePageState extends State<GamePage> {
                 ),
                 initialValue: 'PC, PlayStation 3, PlayStation 4, Xbox One',
                 onTap: () {
-                  print('Test');
+                  Navigator.pushNamed(context, '/platform');
                 },
                 readOnly: true,
               ),
@@ -129,7 +129,7 @@ class _GamePageState extends State<GamePage> {
                 initialValue:
                     'PS3, Playstation 3, Upcoming, Want to play next, Wishlist 2021, Play Asia import, Pre-order, Watched: Single Player (Story)',
                 onTap: () {
-                  print('Test');
+                  Navigator.pushNamed(context, '/tag');
                 },
                 readOnly: true,
               ),

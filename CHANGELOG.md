@@ -1,3 +1,7 @@
+## [1.6.0] - 2020-04-07
+### Added
+- Country, Developer, Platform, Series, Tag Pages.
+
 ## [1.5.0] - 2020-04-06
 ### Changed
 - Redesign the Database.
@@ -9,7 +13,7 @@
 
 ## [1.4.0] - 2020-04-02
 ### Added
-- Adding Game Page.
+- Game Page.
 - Basic functionality for Adding Game Page.
 
 ## [1.3.0] - 2020-03-29
