@@ -106,7 +106,7 @@ class _$GameListsDatabase extends GameListsDatabase {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `country` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL)');
+            'CREATE TABLE IF NOT EXISTS `country` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT NOT NULL)');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `developer` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `country_id` INTEGER, `name` TEXT, FOREIGN KEY (`country_id`) REFERENCES `country` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION)');
         await database.execute(
@@ -217,7 +217,8 @@ class _$GameListsDatabase extends GameListsDatabase {
 
 class _$CountryDao extends CountryDao {
   _$CountryDao(this.database, this.changeListener)
-      : _countryInsertionAdapter = InsertionAdapter(
+      : _queryAdapter = QueryAdapter(database),
+        _countryInsertionAdapter = InsertionAdapter(
             database,
             'country',
             (Country item) =>
@@ -227,7 +228,27 @@ class _$CountryDao extends CountryDao {
 
   final StreamController<String> changeListener;
 
+  final QueryAdapter _queryAdapter;
+
   final InsertionAdapter<Country> _countryInsertionAdapter;
+
+  @override
+  Future<List<Country>> findWithNames(String name) async {
+    return _queryAdapter.queryList(
+        'SELECT * FROM Country WHERE name = ?1 ORDER BY name',
+        mapper: (Map<String, Object?> row) =>
+            Country(row['id'] as int?, row['name'] as String),
+        arguments: [name]);
+  }
+
+  @override
+  Future<List<Country>> findWithNamesLike(String name) async {
+    return _queryAdapter.queryList(
+        'SELECT * FROM Country WHERE name LIKE ?1 ORDER BY name',
+        mapper: (Map<String, Object?> row) =>
+            Country(row['id'] as int?, row['name'] as String),
+        arguments: [name]);
+  }
 
   @override
   Future<void> insertCountry(Country country) async {

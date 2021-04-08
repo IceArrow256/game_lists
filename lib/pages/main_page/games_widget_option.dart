@@ -18,8 +18,8 @@ class _GamesWidgetOptionState extends State<GamesWidgetOption> {
         Icon(Icons.directions_car),
         Icon(Icons.directions_transit),
         Icon(Icons.directions_bike),
-        Icon(Icons.directions_bike),
-        Icon(Icons.directions_bike),
+        Icon(Icons.directions_bus),
+        Icon(Icons.directions_boat),
       ],
     );
   }

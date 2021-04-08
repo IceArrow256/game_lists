@@ -1,3 +1,11 @@
+## [1.7.0] - 2020-04-08
+### Added
+- Requests for countryDao.
+- Split County, Developer, Platform, Series, Tag Page by AddEdit Pages and Select Pages.
+- Possibility to add country to database.
+- Show country list in Select Country Page.
+- Using Provider for database object.
+
 ## [1.6.0] - 2020-04-07
 ### Added
 - Country, Developer, Platform, Series, Tag Pages.

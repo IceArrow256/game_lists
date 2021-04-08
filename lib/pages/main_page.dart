@@ -16,7 +16,7 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
-  int _selectedIndex = 0;
+  int _selectedIndex = 1;
 
   List<WidgetOption>? _widgetOptions;
 
@@ -40,10 +40,10 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
           tabController: gamesTabController,
           isTabScrollable: true,
           tabs: [
-            Tab(text: 'Inbox'),
             Tab(text: 'Playing'),
-            Tab(text: 'Pause'),
+            Tab(text: 'Planning'),
             Tab(text: 'Completed'),
+            Tab(text: 'Pause'),
             Tab(text: 'Dropped')
           ],
           iconData: Icons.games,
