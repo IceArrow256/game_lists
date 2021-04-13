@@ -4,6 +4,7 @@
     <application
         android:icon="@mipmap/ic_launcher"
         android:label="Game Lists"
+        android:usesCleartextTraffic="true"
         android:requestLegacyExternalStorage="true">
 
         <activity

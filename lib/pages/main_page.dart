@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:game_lists/database/database.dart';
 import 'package:game_lists/pages/main_page/games_widget_option.dart';
 import 'package:game_lists/pages/main_page/search_widget_option.dart';
 import 'package:game_lists/pages/main_page/statistics_widget_option.dart';
 import 'package:game_lists/pages/main_page/widget_option.dart';
 
 class MainPage extends StatefulWidget {
-  MainPage({Key? key, this.database}) : super(key: key);
+  MainPage({Key? key}) : super(key: key);
 
-  final GameListsDatabase? database;
 
   @override
   _MainPageState createState() => _MainPageState();
@@ -30,9 +28,11 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
           title: 'Search',
           iconData: Icons.search,
           floatingActionButton: FloatingActionButton(
-              child: Icon(Icons.add),
+              child: Icon(Icons.search),
               onPressed: () async {
-                Navigator.pushNamed(context, '/game');
+                setState(() {
+                  
+                });
               }),
           widget: SearchWidgetOption()),
       WidgetOption(

@@ -2,23 +2,25 @@ name: game_lists
 description: The app for tracking what you're playing.
 version: 1.7.0
 environment:
-  sdk: '>=2.1.0 <3.0.0'
+  sdk: '>=2.12.0 <3.0.0'
 dependencies:
   flutter:
     sdk: flutter
-  floor: ^1.0.1
   image: ^3.0.2
   image_picker: ^0.7.4
   provider: ^5.0.0
+  hive: ^2.0.2
+  hive_flutter: ^1.0.0
+  http: ^0.13.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  floor_generator: ^1.0.1
+  hive_generator: ^1.0.1
   build_runner: ^1.12.2
 flutter:
   uses-material-design: true
-  # assets:
-  #   - images/a_dot_burr.jpeg
+  assets:
+    - images/image.png
   #   - images/a_dot_ham.jpeg
   # fonts:
   #   - family: Schyler

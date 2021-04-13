@@ -5,14 +5,12 @@ class SelectPage extends StatefulWidget {
       {Key? key,
       required this.title,
       required this.addRoute,
-      required this.body,
-      this.setParentState})
+      required this.body})
       : super(key: key);
 
   final String title;
   final String addRoute;
   final Widget body;
-  final VoidCallback? setParentState;
 
   @override
   _SelectPageState createState() => _SelectPageState();
@@ -34,9 +32,7 @@ class _SelectPageState extends State<SelectPage> {
               icon: const Icon(Icons.add),
               tooltip: 'Add ' + widget.title,
               onPressed: () async {
-                Navigator.pushNamed(context, widget.addRoute).then((value) {
-                  widget.setParentState!();
-                });
+                await Navigator.pushNamed(context, widget.addRoute);
               },
             ),
           ],

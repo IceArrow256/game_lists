@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:game_lists/pages/select_pages/select_company_page.dart';
 import 'package:image/image.dart' as Img;
 import 'package:image_picker/image_picker.dart';
 
@@ -59,9 +60,7 @@ class _GamePageState extends State<GamePage> {
               child: InkWell(
                 onTap: _getImage,
                 child: _image == null
-                    ? Image.network(
-                        'https://place-hold.it/308x432',
-                      )
+                    ? Image(image: AssetImage('images/image.png'))
                     : Image.memory(_image!, scale: 2),
               ),
             ),
@@ -88,7 +87,7 @@ class _GamePageState extends State<GamePage> {
               ),
               initialValue: 'cavia inc., Toylogic',
               onTap: () {
-                Navigator.pushNamed(context, '/select_developer');
+                Navigator.pushNamed(context, SelectCompanyPage.routeName);
               },
               readOnly: true,
             ),

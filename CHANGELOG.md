@@ -1,3 +1,11 @@
+## [1.8.0] - 2020-04-013
+### Added
+- Searching provided by external server.
+
+### Changed
+- Migrate from Floor to Hive.
+
+
 ## [1.7.0] - 2020-04-08
 ### Added
 - Requests for countryDao.
