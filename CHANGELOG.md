@@ -1,3 +1,73 @@
+## [1.9.0] - 2020-04-30
+### Added
+- Card for showing game in search tab.
+
+### Changed
+- Search use new server api.
+- Update README.md.
+
+
+## [1.8.0] - 2020-04-13
+### Added
+- Searching provided by external server.
+
+### Changed
+- Migrate from Floor to Hive.
+
+
+## [1.7.0] - 2020-04-08
+### Added
+- Requests for countryDao.
+- Split County, Developer, Platform, Series, Tag Page by AddEdit Pages and Select Pages.
+- Possibility to add country to database.
+- Show country list in Select Country Page.
+- Using Provider for database object.
+
+## [1.6.0] - 2020-04-07
+### Added
+- Country, Developer, Platform, Series, Tag Pages.
+
+## [1.5.0] - 2020-04-06
+### Changed
+- Redesign the Database.
+- Redesign the Main Page and the Navigation Bar.
+- Redesign the Game Page.
+
+### Removed
+- Home in Navigation Bar.
+
+## [1.4.0] - 2020-04-02
+### Added
+- Game Page.
+- Basic functionality for Adding Game Page.
+
+## [1.3.0] - 2020-03-29
+### Added
+- Tabs For Games In Navigation Bar.
+
+## [1.2.0] - 2020-03-28
+### Added
+- Main Page.
+- Bottom Navigation Bar for Main Page.
+- Bottom Navigation Bar Items.
+- Drawer for Main Page.
+- About Page.
+- Settings Page.
+
+### Changed
+- Navigation Bar color.
+- Status Bar color.
+
+## [1.1.0] - 2020-03-27
+### Added
+- Database with all basic entities.
+
+## [1.0.0] - 2020-03-26
+### Added
+- Start remaking the app with accumulated experience.
+- Rename project from game_list to game_lists.
+
+
 ## [0.13.0] - 2020-03-04
 ### Added
 - Status for game in list.
