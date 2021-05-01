@@ -8,7 +8,6 @@ import 'package:game_lists/pages/main_page/widget_option.dart';
 class MainPage extends StatefulWidget {
   MainPage({Key? key}) : super(key: key);
 
-
   @override
   _MainPageState createState() => _MainPageState();
 }
@@ -17,27 +16,19 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   int _selectedIndex = 1;
 
   List<WidgetOption>? _widgetOptions;
+  TabController? _gamesTabController;
+  TabController? _statisticsTabController;
 
   @override
-  void initState() {
-    super.initState();
-    var gamesTabController = TabController(vsync: this, length: 5);
-    var statisticsTabController = TabController(vsync: this, length: 2);
+  Widget build(BuildContext context) {
     _widgetOptions = <WidgetOption>[
       WidgetOption(
           title: 'Search',
           iconData: Icons.search,
-          floatingActionButton: FloatingActionButton(
-              child: Icon(Icons.search),
-              onPressed: () async {
-                setState(() {
-                  
-                });
-              }),
           widget: SearchWidgetOption()),
       WidgetOption(
           title: 'Games',
-          tabController: gamesTabController,
+          tabController: _gamesTabController,
           isTabScrollable: true,
           tabs: [
             Tab(text: 'Playing'),
@@ -47,28 +38,18 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
             Tab(text: 'Dropped')
           ],
           iconData: Icons.games,
-          widget: GamesWidgetOption(tabController: gamesTabController)),
+          widget: GamesWidgetOption(tabController: _gamesTabController)),
       WidgetOption(
         title: 'Statistics',
-        tabController: statisticsTabController,
+        tabController: _statisticsTabController,
         tabs: [
           Tab(text: 'Player'),
           Tab(text: 'Global'),
         ],
         iconData: Icons.insert_chart,
-        widget: StatisticsWidgetOption(tabController: statisticsTabController),
+        widget: StatisticsWidgetOption(tabController: _statisticsTabController),
       )
     ];
-  }
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton:
           _widgetOptions!.elementAt(_selectedIndex).floatingActionButton,
@@ -123,5 +104,18 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
         child: _widgetOptions!.elementAt(_selectedIndex).widget,
       ),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _gamesTabController = TabController(vsync: this, length: 5);
+    _statisticsTabController = TabController(vsync: this, length: 2);
+  }
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
   }
 }

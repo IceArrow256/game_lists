@@ -1,4 +1,13 @@
-## [1.8.0] - 2020-04-013
+## [1.9.0] - 2020-04-30
+### Added
+- Card for showing game in search tab.
+
+### Changed
+- Search use new server api.
+- Update README.md.
+
+
+## [1.8.0] - 2020-04-13
 ### Added
 - Searching provided by external server.
 
