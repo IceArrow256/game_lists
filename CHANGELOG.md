@@ -1,3 +1,14 @@
+## [1.10.0] - 2020-05-02
+### Added
+- Game In List Page.
+
+### Changed
+- Refactor Search Widget Option.
+- Replace http with dio.
+- Update card view for Search Widget Option.
+- Update README.md.
+
+
 ## [1.9.0] - 2020-04-30
 ### Added
 - Card for showing game in search tab.

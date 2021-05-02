@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:game_lists/pages/about_page.dart';
-import 'package:game_lists/pages/add_edit_pages/country_page.dart';
 import 'package:game_lists/pages/add_edit_pages/company_page.dart';
-import 'package:game_lists/pages/select_pages/select_company_page.dart';
+import 'package:game_lists/pages/add_edit_pages/country_page.dart';
+import 'package:game_lists/pages/add_edit_pages/game_in_list_page.dart';
 import 'package:game_lists/pages/add_edit_pages/game_page.dart';
-import 'package:game_lists/pages/main_page.dart';
 import 'package:game_lists/pages/add_edit_pages/platform_page.dart';
 import 'package:game_lists/pages/add_edit_pages/series_page.dart';
+import 'package:game_lists/pages/add_edit_pages/tag_page.dart';
+import 'package:game_lists/pages/main_page.dart';
+import 'package:game_lists/pages/select_pages/select_company_page.dart';
 import 'package:game_lists/pages/select_pages/select_platform_page.dart';
 import 'package:game_lists/pages/select_pages/select_series_page.dart';
 import 'package:game_lists/pages/select_pages/select_tag_page.dart';
 import 'package:game_lists/pages/settings_page.dart';
-import 'package:game_lists/pages/add_edit_pages/tag_page.dart';
 
 class GameLists extends StatefulWidget {
   const GameLists({Key? key}) : super(key: key);
-
 
   @override
   _GameListsState createState() => _GameListsState();
@@ -28,9 +28,13 @@ class _GameListsState extends State<GameLists> {
     return MaterialApp(
       title: 'Game Lists',
       theme: ThemeData(
-        accentColor: Colors.red,
-        brightness: Brightness.dark,
-      ),
+          accentColor: Colors.red,
+          brightness: Brightness.dark,
+          textButtonTheme: TextButtonThemeData(
+            style: ButtonStyle(
+              foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+            ),
+          )),
       initialRoute: '/',
       routes: {
         // Main page
@@ -39,11 +43,12 @@ class _GameListsState extends State<GameLists> {
         '/settings': (context) => SettingsPage(),
         // Add Edit Page
         '/country': (context) => CountryPage(),
-        CompanyPage.routeName: (context) => CompanyPage(),
         '/game': (context) => GamePage(),
         '/platform': (context) => PlatformPage(),
         '/series': (context) => SeriesPage(),
         '/tag': (context) => TagPage(),
+        CompanyPage.routeName: (context) => CompanyPage(),
+        GameInListPage.routeName: (context) => GameInListPage(),
         // Select Pages
         SelectCompanyPage.routeName: (context) => SelectCompanyPage(),
         '/select_platform': (context) => SelectPlatformPage(),

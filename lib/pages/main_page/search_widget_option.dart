@@ -1,7 +1,78 @@
-import 'dart:convert' as convert;
-
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:game_lists/pages/add_edit_pages/game_in_list_page.dart';
+
+class SearchGameCard extends StatelessWidget {
+  final String imageUrl;
+  final String name;
+  final List<String> platforms;
+  final String releaseDate;
+  final VoidCallback onTap;
+  const SearchGameCard(
+      {Key? key,
+      required this.imageUrl,
+      required this.name,
+      required this.platforms,
+      required this.releaseDate,
+      required this.onTap})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: InkWell(
+        borderRadius: BorderRadius.circular(4.0),
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Image.network(
+                imageUrl,
+                height: 128,
+                width: 96,
+                fit: BoxFit.fitHeight,
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
+                child: Container(
+                  height: 128,
+                  width: MediaQuery.of(context).size.width - 136,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            name,
+                            style: TextStyle(fontSize: 20),
+                          ),
+                          Text(
+                            platforms.join(', '),
+                            style: TextStyle(fontSize: 12),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Text(releaseDate, style: TextStyle(fontSize: 14)),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
 
 class SearchWidgetOption extends StatefulWidget {
   @override
@@ -14,11 +85,8 @@ class _SearchWidgetOptionState extends State<SearchWidgetOption> {
 
   @override
   Widget build(BuildContext context) {
-    _url = Uri.http(
-        '192.168.0.2:8000', '/search', {'query': textEditingController.text});
-    print(_url);
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(4.0),
       child: Column(
         children: [
           TextFormField(
@@ -31,94 +99,59 @@ class _SearchWidgetOptionState extends State<SearchWidgetOption> {
                 prefixIcon: Icon(Icons.search),
                 hintText: 'Search for game to add...'),
           ),
-          FutureBuilder<http.Response>(
-            future: http.get(_url!),
-            builder: (context, snapshot) {
-              if (snapshot.hasData && snapshot.data!.body == "[]") {
-                return Container();
-              }
-              if (snapshot.hasData && snapshot.data!.body != "[]") {
-                print(convert.jsonDecode(snapshot.data!.body).runtimeType);
-                var data =
-                    convert.jsonDecode(snapshot.data!.body) as List<dynamic>;
-                return Expanded(
-                  child: Container(
-                    child: ListView.builder(
-                      padding: EdgeInsets.all(8),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(0, 2, 0, 0),
+              child: FutureBuilder<List<dynamic>>(
+                future: search(query: textEditingController.text),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    var data = snapshot.data!;
+                    return ListView.builder(
+                      padding: EdgeInsets.symmetric(vertical: 4),
                       itemCount: data.length,
                       itemBuilder: (context, index) {
+                        var game = data.elementAt(index);
                         List<String> platforms = [];
-                        for (var platform
-                            in data.elementAt(index)['platforms']) {
+                        for (var platform in game['platforms']) {
                           platforms.add(platform['abbreviation']);
                         }
-                        return Card(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Image.network(data.elementAt(index)['imageUrl'],
-                                    height: 128,
-                                    width: 91,
-                                    fit: BoxFit.fitHeight),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(8, 0, 0, 0),
-                                  child: Container(
-                                    height: 128,
-                                    width:
-                                        MediaQuery.of(context).size.width - 155,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              data.elementAt(index)['name'],
-                                              style: TextStyle(fontSize: 18),
-                                            ),
-                                            Text(
-                                              platforms.join(', '),
-                                              maxLines: null,
-                                              style: TextStyle(fontSize: 14),
-                                            ),
-                                          ],
-                                        ),
-                                        Container(
-                                          child: Text(
-                                            data.elementAt(
-                                                        index)['releaseDate'] ==
-                                                    null
-                                                ? ""
-                                                : data.elementAt(
-                                                    index)['releaseDate'],
-                                            style: TextStyle(fontSize: 14),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
+                        return SearchGameCard(
+                          imageUrl: game['imageUrl'],
+                          name: game['name'],
+                          platforms: platforms,
+                          releaseDate: game['releaseDate'] ?? '',
+                          onTap: () {
+                            Navigator.pushNamed(
+                                context, GameInListPage.routeName,
+                                arguments: game['id']);
+                          },
                         );
                       },
-                    ),
-                  ),
-                );
-              }
-              return Center();
-            },
+                    );
+                  }
+                  return Center();
+                },
+              ),
+            ),
           )
         ],
       ),
     );
+  }
+
+  Future<List<dynamic>> search({required String query}) async {
+    var data = [];
+    await Dio()
+        .get(
+          'http://192.168.0.2:8000/search',
+          queryParameters: {'query': query},
+        )
+        .then((value) => data = value.data)
+        .catchError((e) {
+          print("error");
+        });
+
+    return data;
   }
 }

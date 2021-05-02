@@ -9,7 +9,7 @@ The app for tracking what you're playing.
 ~~~
 $ git clone https://github.com/boyan01/flutter-netease-music.git
 ~~~
-4. Build & run
+4. Build & run:
 ~~~
 $ flutter run
 ~~~
@@ -24,6 +24,7 @@ $ flutter run
 <img src="screenshots/2021-05-01T13_45_12.014633.png" width="360"/>
 <img src="screenshots/2021-05-01T13_45_13.762633.png" width="360"/>
 <img src="screenshots/2021-05-01T13_45_16.462633.png" width="360"/>
+<img src="screenshots/2021-05-02T21_50_23.116536.png" width="360"/>
 </details>
 
 

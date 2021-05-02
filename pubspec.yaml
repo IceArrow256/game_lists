@@ -1,6 +1,6 @@
 name: game_lists
 description: The app for tracking what you're playing.
-version: 1.9.0
+version: 1.10.0
 environment:
   sdk: '>=2.12.0 <3.0.0'
 dependencies:
@@ -11,7 +11,7 @@ dependencies:
   provider: ^5.0.0
   hive: ^2.0.2
   hive_flutter: ^1.0.0
-  http: ^0.13.1
+  dio: ^4.0.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
