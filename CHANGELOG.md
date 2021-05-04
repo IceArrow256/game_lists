@@ -1,3 +1,8 @@
+## [1.11.0] - 2020-05-04
+### Added
+- Multiply walkthrough select in Game In List Page.
+- Save button for Game In List Page.
+
 ## [1.10.0] - 2020-05-02
 ### Added
 - Game In List Page.
