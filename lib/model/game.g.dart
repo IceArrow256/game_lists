@@ -17,34 +17,43 @@ class GameAdapter extends TypeAdapter<Game> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return Game(
-      fields[0] as String,
-      fields[1] as String,
-      fields[2] as Uint8List?,
-      (fields[3] as List).cast<Genre>(),
+      fields[0] as int,
+      fields[1] as DateTime,
+      fields[2] as String,
+      fields[3] as String,
       fields[4] as String?,
-      (fields[5] as List).cast<Release>(),
-      (fields[6] as List).cast<Franchise>(),
+      fields[5] as DateTime?,
+      (fields[6] as List).cast<Developer>(),
+      (fields[7] as List).cast<Franchise>(),
+      (fields[8] as List).cast<Genre>(),
+      (fields[9] as List).cast<Platform>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, Game obj) {
     writer
-      ..writeByte(7)
+      ..writeByte(10)
       ..writeByte(0)
-      ..write(obj.id)
+      ..write(obj.giantBombId)
       ..writeByte(1)
-      ..write(obj.name)
+      ..write(obj.dateLastUpdated)
       ..writeByte(2)
-      ..write(obj.image)
+      ..write(obj.name)
       ..writeByte(3)
-      ..write(obj.genres)
+      ..write(obj.imageUrl)
       ..writeByte(4)
       ..write(obj.description)
       ..writeByte(5)
-      ..write(obj.releases)
+      ..write(obj.releaseDate)
       ..writeByte(6)
-      ..write(obj.franchises);
+      ..write(obj.developers)
+      ..writeByte(7)
+      ..write(obj.franchises)
+      ..writeByte(8)
+      ..write(obj.genres)
+      ..writeByte(9)
+      ..write(obj.platforms);
   }
 
   @override

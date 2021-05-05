@@ -5,8 +5,8 @@ part 'franchise.g.dart';
 @HiveType(typeId: 2)
 class Franchise extends HiveObject {
   @HiveField(0)
-  String id;
+  int giantBombId;
   @HiveField(1)
   String name;
-  Franchise(this.id, this.name); 
+  Franchise(this.giantBombId, this.name);
 }

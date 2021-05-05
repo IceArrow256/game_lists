@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:game_lists/model/company.dart';
+import 'package:game_lists/model/developer.dart';
 import 'package:game_lists/pages/add_edit_pages/company_page.dart';
 import 'package:hive/hive.dart';
 
@@ -32,8 +32,8 @@ class _SelectCompanyPageState extends State<SelectCompanyPage> {
           ),
         ],
       ),
-      body: FutureBuilder<Box<Company>>(
-        future: Hive.openBox<Company>('company'),
+      body: FutureBuilder<Box<Developer>>(
+        future: Hive.openBox<Developer>('company'),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             var companies = snapshot.data!.values.toList()
@@ -69,7 +69,7 @@ class CompanyCard extends StatelessWidget {
       {Key? key, required this.company, this.onEditPressed, this.onLongPress})
       : super(key: key);
 
-  final Company company;
+  final Developer company;
   final VoidCallback? onEditPressed;
   final VoidCallback? onLongPress;
 
@@ -84,7 +84,7 @@ class CompanyCard extends StatelessWidget {
       child: ListTile(
         leading: Icon(Icons.flag),
         title: Text(company.name),
-        subtitle: Text(company.country),
+        subtitle: Text(company.country!),
         trailing: IconButton(
           icon: Icon(Icons.edit),
           onPressed: onEditPressed,

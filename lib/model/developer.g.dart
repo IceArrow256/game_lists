@@ -1,41 +1,41 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'release.dart';
+part of 'developer.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class ReleaseAdapter extends TypeAdapter<Release> {
+class DeveloperAdapter extends TypeAdapter<Developer> {
   @override
-  final int typeId = 5;
+  final int typeId = 1;
 
   @override
-  Release read(BinaryReader reader) {
+  Developer read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return Release(
-      fields[0] as String,
+    return Developer(
+      fields[0] as int,
       fields[1] as DateTime,
-      (fields[2] as List).cast<Company>(),
-      fields[3] as Platform,
+      fields[2] as String,
+      fields[3] as String?,
     );
   }
 
   @override
-  void write(BinaryWriter writer, Release obj) {
+  void write(BinaryWriter writer, Developer obj) {
     writer
       ..writeByte(4)
       ..writeByte(0)
-      ..write(obj.id)
+      ..write(obj.giantBombId)
       ..writeByte(1)
-      ..write(obj.releaseDate)
+      ..write(obj.dateLastUpdated)
       ..writeByte(2)
-      ..write(obj.developers)
+      ..write(obj.name)
       ..writeByte(3)
-      ..write(obj.platform);
+      ..write(obj.country);
   }
 
   @override
@@ -44,7 +44,7 @@ class ReleaseAdapter extends TypeAdapter<Release> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is ReleaseAdapter &&
+      other is DeveloperAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

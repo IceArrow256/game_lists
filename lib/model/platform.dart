@@ -5,11 +5,11 @@ part 'platform.g.dart';
 @HiveType(typeId: 4)
 class Platform extends HiveObject {
   @HiveField(0)
-  String id;
+  int giantBombId;
   @HiveField(1)
   String name;
   @HiveField(2)
-  String shortName;
-  
-  Platform(this.id, this.name, this.shortName);
+  String abbreviation;
+
+  Platform(this.giantBombId, this.name, this.abbreviation);
 }

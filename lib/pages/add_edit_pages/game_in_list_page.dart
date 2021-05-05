@@ -1,5 +1,14 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:game_lists/model/developer.dart';
+import 'package:game_lists/model/franchise.dart';
+import 'package:game_lists/model/game.dart';
+import 'package:game_lists/model/game_in_list.dart';
+import 'package:game_lists/model/genre.dart';
+import 'package:game_lists/model/platform.dart';
+import 'package:game_lists/model/status.dart';
+import 'package:game_lists/model/walkthrough.dart';
+import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 
 class DateRange {
@@ -9,6 +18,13 @@ class DateRange {
   DateRange({this.start, this.end});
 }
 
+class StatusName {
+  Status status;
+
+  String name;
+  StatusName(this.status, this.name);
+}
+
 class GameInListPage extends StatefulWidget {
   static const routeName = '/gameInListPage';
   @override
@@ -16,12 +32,14 @@ class GameInListPage extends StatefulWidget {
 }
 
 class WalkthroughWidget extends StatefulWidget {
-  Map<String, DateTime?> walkthrough = {};
+  Walkthrough walkthrough;
   final DateTime firstDate;
   WalkthroughWidget({
     Key? key,
     required this.firstDate,
-  }) : super(key: key);
+    Walkthrough? walkthrough,
+  })  : this.walkthrough = walkthrough ?? Walkthrough(),
+        super(key: key);
 
   @override
   _WalkthroughWidgetState createState() => _WalkthroughWidgetState();
@@ -30,17 +48,184 @@ class WalkthroughWidget extends StatefulWidget {
 }
 
 class _GameInListPageState extends State<GameInListPage> {
-  List<String> _statuses = [
-    'Playing',
-    'Planning',
-    'Completed',
-    'Pause',
-    'Dropped',
+  List<StatusName> _statuses = [
+    StatusName(Status.playing, 'Playing'),
+    StatusName(Status.planning, 'Planning'),
+    StatusName(Status.completed, 'Completed'),
+    StatusName(Status.pause, 'Pause'),
+    StatusName(Status.dropped, 'Dropped'),
   ];
-  String _selectedStatus = 'Playing';
+  StatusName? _selectedStatus;
   double _currentRating = 0;
   var walkthroughWidgets = <WalkthroughWidget>[];
   var noteTextEditingController = TextEditingController();
+
+  Future<List<Platform>> savePlatforms(rawPlatforms) async {
+    var platforms = <Platform>[];
+    for (var rawPlatform in rawPlatforms) {
+      platforms.add(await savePlatform(rawPlatform));
+    }
+    return platforms;
+  }
+
+  Future<Platform> savePlatform(rawPlatform) async {
+    var platformBox = await Hive.openBox<Platform>('platform');
+    var platformsInBox =
+        platformBox.values.where((e) => e.giantBombId == rawPlatform['id']);
+    var platform = Platform(
+        rawPlatform['id'], rawPlatform['name'], rawPlatform['abbreviation']);
+    if (platformsInBox.isEmpty) {
+      platformBox.add(platform);
+    } else {
+      platform = platformsInBox.first;
+    }
+    return platform;
+  }
+
+  Future<List<Franchise>> saveFranchises(rawFranchises) async {
+    var franchises = <Franchise>[];
+    for (var rawFranchise in rawFranchises) {
+      franchises.add(await saveFranchise(rawFranchise));
+    }
+    return franchises;
+  }
+
+  Future<Franchise> saveFranchise(rawFranchise) async {
+    var franchiseBox = await Hive.openBox<Franchise>('franchise');
+    var franchisesInBox =
+        franchiseBox.values.where((e) => e.giantBombId == rawFranchise['id']);
+    var franchise = Franchise(rawFranchise['id'], rawFranchise['name']);
+    if (franchisesInBox.isEmpty) {
+      franchiseBox.add(franchise);
+    } else {
+      franchise = franchisesInBox.first;
+    }
+    return franchise;
+  }
+
+  Future<List<Genre>> saveGenres(rawGenre) async {
+    var genres = <Genre>[];
+    for (var rawGenre in rawGenre) {
+      genres.add(await saveGenre(rawGenre));
+    }
+    return genres;
+  }
+
+  Future<Genre> saveGenre(rawGenre) async {
+    var genreBox = await Hive.openBox<Genre>('genre');
+    var genresInBox =
+        genreBox.values.where((e) => e.giantBombId == rawGenre['id']);
+    var genre = Genre(rawGenre['id'], rawGenre['name']);
+    if (genresInBox.isEmpty) {
+      genreBox.add(genre);
+    } else {
+      genre = genresInBox.first;
+    }
+    return genre;
+  }
+
+  Future<List<Developer>> saveDevelopers(rawDevelopers) async {
+    var developers = <Developer>[];
+    for (var rawDeveloper in rawDevelopers) {
+      developers.add(await saveDeveloper(rawDeveloper));
+    }
+    return developers;
+  }
+
+  Future<Developer> saveDeveloper(rawDeveloper) async {
+    var developerBox = await Hive.openBox<Developer>('developer');
+    var developersInBox =
+        developerBox.values.where((e) => e.giantBombId == rawDeveloper['id']);
+    var developer = Developer(
+        rawDeveloper['id'],
+        DateTime.parse(rawDeveloper['dateLastUpdated']),
+        rawDeveloper['name'],
+        rawDeveloper['country']);
+    if (developersInBox.isEmpty) {
+      developerBox.add(developer);
+    } else {
+      developer = developersInBox.first;
+    }
+    return developer;
+  }
+
+  Future<Game> saveGame(rawGame) async {
+    var gameBox = await Hive.openBox<Game>('game');
+    var gamesInBox =
+        gameBox.values.where((e) => e.giantBombId == rawGame['id']);
+    var game = Game(
+        rawGame['id'],
+        DateTime.parse(rawGame['dateLastUpdated']),
+        rawGame['name'],
+        rawGame['imageUrl'],
+        rawGame['description'],
+        DateTime.parse(rawGame['releaseDate']),
+        await saveDevelopers(rawGame['developers']),
+        await saveFranchises(rawGame['franchises']),
+        await saveGenres(rawGame['genres']),
+        await savePlatforms(rawGame['platforms']));
+    if (gamesInBox.isEmpty) {
+      await gameBox.add(game);
+    } else {
+      game = gamesInBox.first;
+    }
+    return game;
+  }
+
+  Future<Map<String, dynamic>> getMapFromGame(Game game) async {
+    final DateFormat formatter = DateFormat('yyyy-MM-dd');
+    var gameData = <String, dynamic>{};
+    gameData['key'] = game.key;
+    gameData['id'] = game.giantBombId;
+    gameData['dateLastUpdated'] = game.dateLastUpdated.toIso8601String();
+    gameData['name'] = game.name;
+    gameData['imageUrl'] = game.imageUrl;
+    gameData['description'] = game.description;
+    gameData['releaseDate'] = formatter.format(game.releaseDate!);
+    gameData['developers'] = game.developers.map((e) => {
+          'key': e.key,
+          'id': e.giantBombId,
+          'name': e.name,
+          'country': e.country,
+        });
+    gameData['franchises'] = game.franchises.map((e) => {
+          'key': e.key,
+          'id': e.giantBombId,
+          'name': e.name,
+        });
+    gameData['genres'] = game.genres.map((e) => {
+          'key': e.key,
+          'id': e.giantBombId,
+          'name': e.name,
+        });
+    gameData['platforms'] = game.platforms.map((e) => {
+          'key': e.key,
+          'id': e.giantBombId,
+          'name': e.name,
+          'abbreviation': e.abbreviation,
+        });
+    return gameData;
+  }
+
+  void save(Map<String, dynamic> gameData) async {
+    var game = await saveGame(gameData);
+    var gameInListBox = await Hive.openBox<GameInList>('gameInList');
+    var gameInListsBox = gameInListBox.values.where((e) => e.game == game);
+    var gameInList = GameInList(
+        game,
+        _currentRating.toInt(),
+        noteTextEditingController.text,
+        _selectedStatus != null
+            ? _selectedStatus!.status
+            : _statuses.first.status,
+        walkthroughWidgets.map((e) => e.walkthrough).toList());
+    if (gameInListsBox.isEmpty) {
+      await gameInListBox.add(gameInList);
+    } else {
+      gameInList = gameInListsBox.first;
+    }
+    Navigator.pop(context);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -94,17 +279,16 @@ class _GameInListPageState extends State<GameInListPage> {
                                       style: TextStyle(
                                           fontWeight: FontWeight.w600),
                                     ),
-                                    DropdownButton<String>(
+                                    DropdownButton<StatusName>(
                                         isExpanded: true,
-                                        value: _selectedStatus,
+                                        value:
+                                            _selectedStatus ?? _statuses.first,
                                         onChanged: (value) => setState(
                                             () => _selectedStatus = value!),
                                         items: _statuses
                                             .map((e) => DropdownMenuItem(
-                                                  value: e,
-                                                  child: Text(e),
-                                                ))
-                                            .toList()),
+                                                value: e, child: Text(e.name)))
+                                            .toList())
                                   ],
                                 ),
                               ]),
@@ -203,17 +387,11 @@ class _GameInListPageState extends State<GameInListPage> {
                         SizedBox(width: 8),
                         Expanded(
                           child: ElevatedButton(
-                              onPressed: () {
-                                print(game);
-                                print(_selectedStatus);
-                                print(_currentRating);
-                                print(walkthroughWidgets
-                                    .map((e) => e.walkthrough)
-                                    .toList());
-                                print(noteTextEditingController.text);
-                                Navigator.pop(context);
-                              },
-                              child: Text('Save')),
+                            onPressed: () {
+                              save(game);
+                            },
+                            child: Text('Save'),
+                          ),
                         ),
                       ],
                     ),
@@ -263,52 +441,38 @@ class _WalkthroughWidgetState extends State<WalkthroughWidget> {
             onPressed: () async {
               var date = await showDatePicker(
                   context: context,
-                  initialDate:
-                      widget.walkthrough['startDate'] ?? DateTime.now(),
+                  initialDate: widget.walkthrough.startDate ?? DateTime.now(),
                   firstDate: widget.firstDate,
                   lastDate: DateTime.now());
               setState(() {
-                widget.walkthrough['startDate'] =
-                    date ?? widget.walkthrough['startDate'];
-                if (widget.walkthrough['endDate'] != null &&
-                    widget.walkthrough['endDate']!
-                            .compareTo(widget.walkthrough['startDate']!) <
+                widget.walkthrough.startDate =
+                    date ?? widget.walkthrough.startDate;
+                if (widget.walkthrough.endDate != null &&
+                    widget.walkthrough.endDate!
+                            .compareTo(widget.walkthrough.startDate!) <
                         0) {
-                  widget.walkthrough['endDate'] = null;
+                  widget.walkthrough.endDate = null;
                 }
               });
             },
             child: Text(
-              'Start Date: ${widget.walkthrough['startDate'] != null ? formatter.format(widget.walkthrough['startDate']!) : 'Tap To Set'}',
+              'Start Date: ${widget.walkthrough.startDate != null ? formatter.format(widget.walkthrough.startDate!) : 'Tap To Set'}',
             )),
         TextButton(
             onPressed: () async {
               var date = await showDatePicker(
                   context: context,
-                  initialDate: widget.walkthrough['endDate'] ?? DateTime.now(),
-                  firstDate:
-                      widget.walkthrough['startDate'] ?? widget.firstDate,
+                  initialDate: widget.walkthrough.endDate ?? DateTime.now(),
+                  firstDate: widget.walkthrough.startDate ?? widget.firstDate,
                   lastDate: DateTime.now());
               setState(() {
-                widget.walkthrough['endDate'] =
-                    date ?? widget.walkthrough['endDate'];
+                widget.walkthrough.endDate = date ?? widget.walkthrough.endDate;
               });
             },
             child: Text(
-              'End Date: ${widget.walkthrough['endDate'] != null ? formatter.format(widget.walkthrough['endDate']!) : 'Tap To Set'}',
+              'End Date: ${widget.walkthrough.endDate != null ? formatter.format(widget.walkthrough.endDate!) : 'Tap To Set'}',
             )),
       ],
     );
-  }
-
-  @override
-  void initState() {
-    if (!widget.walkthrough.containsKey('startDate')) {
-      widget.walkthrough['startDate'] = DateTime.now();
-    }
-    if (!widget.walkthrough.containsKey('endDate')) {
-      widget.walkthrough['endDate'] = null;
-    }
-    super.initState();
   }
 }

@@ -1,3 +1,10 @@
+## [1.12.0] - 2020-05-05
+###
+- Saving game from search to database.
+- Showing Games In Lists in Game Widget Option.
+### Changed
+- Redesign database.
+
 ## [1.11.0] - 2020-05-04
 ### Added
 - Multiply walkthrough select in Game In List Page.

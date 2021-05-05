@@ -17,7 +17,7 @@ class GenreAdapter extends TypeAdapter<Genre> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return Genre(
-      fields[0] as String,
+      fields[0] as int,
       fields[1] as String,
     );
   }
@@ -27,7 +27,7 @@ class GenreAdapter extends TypeAdapter<Genre> {
     writer
       ..writeByte(2)
       ..writeByte(0)
-      ..write(obj.id)
+      ..write(obj.giantBombId)
       ..writeByte(1)
       ..write(obj.name);
   }

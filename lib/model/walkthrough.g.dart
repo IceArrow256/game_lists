@@ -1,35 +1,35 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'company.dart';
+part of 'walkthrough.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class CompanyAdapter extends TypeAdapter<Company> {
+class WalkthroughAdapter extends TypeAdapter<Walkthrough> {
   @override
-  final int typeId = 1;
+  final int typeId = 7;
 
   @override
-  Company read(BinaryReader reader) {
+  Walkthrough read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return Company(
-      fields[0] as String,
-      fields[1] as String,
+    return Walkthrough(
+      startDate: fields[0] as DateTime?,
+      endDate: fields[1] as DateTime?,
     );
   }
 
   @override
-  void write(BinaryWriter writer, Company obj) {
+  void write(BinaryWriter writer, Walkthrough obj) {
     writer
       ..writeByte(2)
       ..writeByte(0)
-      ..write(obj.name)
+      ..write(obj.startDate)
       ..writeByte(1)
-      ..write(obj.country);
+      ..write(obj.endDate);
   }
 
   @override
@@ -38,7 +38,7 @@ class CompanyAdapter extends TypeAdapter<Company> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is CompanyAdapter &&
+      other is WalkthroughAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

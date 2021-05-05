@@ -5,9 +5,9 @@ part 'genre.g.dart';
 @HiveType(typeId: 3)
 class Genre extends HiveObject {
   @HiveField(0)
-  String id;
+  int giantBombId;
   @HiveField(1)
   String name;
 
-  Genre(this.id, this.name);
+  Genre(this.giantBombId, this.name);
 }

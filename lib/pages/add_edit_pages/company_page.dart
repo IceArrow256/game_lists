@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:game_lists/model/company.dart';
+import 'package:game_lists/model/developer.dart';
 import 'package:game_lists/pages/add_edit_pages/add_edit_page.dart';
 import 'package:hive/hive.dart';
 
@@ -18,10 +18,10 @@ class _CompanyPageState extends State<CompanyPage> {
   @override
   Widget build(BuildContext context) {
     if (ModalRoute.of(context)!.settings.arguments != null) {
-      var company = ModalRoute.of(context)!.settings.arguments as Company;
-      _key = company.key;
-      _name = company.name;
-      _country = company.country;
+      // var company = ModalRoute.of(context)!.settings.arguments as Company;
+      // _key = company.key;
+      // _name = company.name;
+      // _country = company.country;
     }
     return Scaffold(
       floatingActionButton: FloatingActionButton(
@@ -29,12 +29,12 @@ class _CompanyPageState extends State<CompanyPage> {
         onPressed: () async {
           if (_formKey.currentState!.validate()) {
             _formKey.currentState!.save();
-            var companyBox = await Hive.openBox<Company>('company');
-            var company = Company(_name!, _country!);
+            // var companyBox = await Hive.openBox<Company>('company');
+            // var company = Company(_name!, _country!);
             if (_key == null) {
-              await companyBox.add(company);
+              // await companyBox.add(company);
             } else {
-              await companyBox.put(_key, company);
+              // await companyBox.put(_key, company);
             }
             Navigator.pop(context);
           }
@@ -48,8 +48,8 @@ class _CompanyPageState extends State<CompanyPage> {
                 IconButton(
                   icon: const Icon(Icons.delete),
                   onPressed: () async {
-                    var companyBox = await Hive.openBox<Company>('company');
-                    await companyBox.delete(_key);
+                    // var companyBox = await Hive.openBox<Company>('company');
+                    // await companyBox.delete(_key);
                     Navigator.pop(context);
                   },
                 ),
