@@ -4,7 +4,6 @@ import 'package:game_lists/game_lists.dart';
 import 'package:game_lists/model/developer.dart';
 import 'package:game_lists/model/franchise.dart';
 import 'package:game_lists/model/game.dart';
-import 'package:game_lists/model/game_in_list.dart';
 import 'package:game_lists/model/genre.dart';
 import 'package:game_lists/model/platform.dart';
 import 'package:game_lists/model/status.dart';
@@ -17,7 +16,6 @@ void main() async {
   Hive.registerAdapter(DeveloperAdapter());
   Hive.registerAdapter(FranchiseAdapter());
   Hive.registerAdapter(GameAdapter());
-  Hive.registerAdapter(GameInListAdapter());
   Hive.registerAdapter(GenreAdapter());
   Hive.registerAdapter(PlatformAdapter());
   Hive.registerAdapter(StatusAdapter());

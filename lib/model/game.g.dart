@@ -27,13 +27,17 @@ class GameAdapter extends TypeAdapter<Game> {
       (fields[7] as List).cast<Franchise>(),
       (fields[8] as List).cast<Genre>(),
       (fields[9] as List).cast<Platform>(),
+      fields[10] as int,
+      fields[11] as String,
+      fields[12] as Status,
+      (fields[13] as List).cast<Walkthrough>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, Game obj) {
     writer
-      ..writeByte(10)
+      ..writeByte(14)
       ..writeByte(0)
       ..write(obj.giantBombId)
       ..writeByte(1)
@@ -53,7 +57,15 @@ class GameAdapter extends TypeAdapter<Game> {
       ..writeByte(8)
       ..write(obj.genres)
       ..writeByte(9)
-      ..write(obj.platforms);
+      ..write(obj.platforms)
+      ..writeByte(10)
+      ..write(obj.rating)
+      ..writeByte(11)
+      ..write(obj.notes)
+      ..writeByte(12)
+      ..write(obj.status)
+      ..writeByte(13)
+      ..write(obj.walkthroughs);
   }
 
   @override

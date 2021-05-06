@@ -1,5 +1,15 @@
+## [1.13.0] - 2020-05-05
+### Add
+- Optimize Game In List Page.
+- Game In List Page use Game entity instead request result.
+- Game In List page can edit exist Game entity.
+### Changed
+- Move save entities' method to entities' files.
+### Removed
+- Game In List entity and put it's property to Game entity.
+
 ## [1.12.0] - 2020-05-05
-###
+### Add
 - Saving game from search to database.
 - Showing Games In Lists in Game Widget Option.
 ### Changed

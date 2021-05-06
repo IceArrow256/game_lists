@@ -1,5 +1,12 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:game_lists/model/developer.dart';
+import 'package:game_lists/model/franchise.dart';
+import 'package:game_lists/model/game.dart';
+import 'package:game_lists/model/genre.dart';
+import 'package:game_lists/model/platform.dart';
+import 'package:game_lists/model/status.dart';
+import 'package:game_lists/model/walkthrough.dart';
 import 'package:game_lists/pages/add_edit_pages/game_in_list_page.dart';
 
 class SearchGameCard extends StatelessWidget {
@@ -111,20 +118,48 @@ class _SearchWidgetOptionState extends State<SearchWidgetOption> {
                       padding: EdgeInsets.symmetric(vertical: 4),
                       itemCount: data.length,
                       itemBuilder: (context, index) {
-                        var game = data.elementAt(index);
+                        var gameInSearch =
+                            data.elementAt(index) as Map<String, dynamic>;
                         List<String> platforms = [];
-                        for (var platform in game['platforms']) {
+                        for (var platform in gameInSearch['platforms']) {
                           platforms.add(platform['abbreviation']);
                         }
                         return SearchGameCard(
-                          imageUrl: game['imageUrl'],
-                          name: game['name'],
+                          imageUrl: gameInSearch['imageUrl'],
+                          name: gameInSearch['name'],
                           platforms: platforms,
-                          releaseDate: game['releaseDate'] ?? '',
-                          onTap: () {
+                          releaseDate: gameInSearch['releaseDate'] ?? '',
+                          onTap: () async {
+                            var data = <String, dynamic>{};
+                            await Dio()
+                                .get(
+                                  'http://192.168.0.2:8000/game/${gameInSearch['id']}',
+                                )
+                                .then((value) => data = value.data)
+                                .catchError((e) {
+                              print(e);
+                            });
+                            var game = Game(
+                              data['id'],
+                              DateTime.parse(data['dateLastUpdated']),
+                              data['name'],
+                              data['imageUrl'],
+                              data['description'],
+                              DateTime.parse(data['releaseDate']),
+                              await saveDevelopers(data['developers']),
+                              await saveFranchises(data['franchises']),
+                              await saveGenres(data['genres']),
+                              await savePlatforms(data['platforms']),
+                              0,
+                              '',
+                              Status.playing,
+                              [Walkthrough(startDate: DateTime.now())],
+                            );
                             Navigator.pushNamed(
-                                context, GameInListPage.routeName,
-                                arguments: game['id']);
+                              context,
+                              GameInListPage.routeName,
+                              arguments: game,
+                            );
                           },
                         );
                       },

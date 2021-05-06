@@ -1,9 +1,9 @@
-import 'dart:typed_data';
-
 import 'package:game_lists/model/developer.dart';
 import 'package:game_lists/model/franchise.dart';
 import 'package:game_lists/model/genre.dart';
 import 'package:game_lists/model/platform.dart';
+import 'package:game_lists/model/status.dart';
+import 'package:game_lists/model/walkthrough.dart';
 import 'package:hive/hive.dart';
 
 part 'game.g.dart';
@@ -40,16 +40,31 @@ class Game extends HiveObject {
   @HiveField(9)
   List<Platform> platforms;
 
+  @HiveField(10)
+  int rating;
+
+  @HiveField(11)
+  String notes;
+
+  @HiveField(12)
+  Status status;
+
+  @HiveField(13)
+  List<Walkthrough> walkthroughs;
+
   Game(
-    this.giantBombId,
-    this.dateLastUpdated,
-    this.name,
-    this.imageUrl,
-    this.description,
-    this.releaseDate,
-    this.developers,
-    this.franchises,
-    this.genres,
-    this.platforms,
-  );
+      this.giantBombId,
+      this.dateLastUpdated,
+      this.name,
+      this.imageUrl,
+      this.description,
+      this.releaseDate,
+      this.developers,
+      this.franchises,
+      this.genres,
+      this.platforms,
+      this.rating,
+      this.notes,
+      this.status,
+      this.walkthroughs);
 }

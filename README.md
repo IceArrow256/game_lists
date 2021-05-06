@@ -18,13 +18,13 @@ $ flutter run
 ## Screenshots
 <details>
   <summary>Click Me</summary>
-<img src="screenshots/2021-05-01T13_44_58.802633.png" width="360"/>
-<img src="screenshots/2021-05-01T13_45_02.534633.png" width="360"/>
+<img src="screenshots/2021-05-06T11_52_00.750181.png" width="360"/>
+<img src="screenshots/2021-05-06T11_53_02.946181.png" width="360"/>
+<img src="screenshots/2021-05-06T12_12_44.954180.png" width="360"/>
 <img src="screenshots/2021-05-01T13_45_05.910633.png" width="360"/>
 <img src="screenshots/2021-05-01T13_45_12.014633.png" width="360"/>
 <img src="screenshots/2021-05-01T13_45_13.762633.png" width="360"/>
 <img src="screenshots/2021-05-01T13_45_16.462633.png" width="360"/>
-<img src="screenshots/2021-05-02T21_50_23.116536.png" width="360"/>
 </details>
 
 
