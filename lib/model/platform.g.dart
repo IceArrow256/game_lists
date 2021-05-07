@@ -17,7 +17,7 @@ class PlatformAdapter extends TypeAdapter<Platform> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return Platform(
-      fields[0] as int,
+      fields[0] as int?,
       fields[1] as String,
       fields[2] as String,
     );

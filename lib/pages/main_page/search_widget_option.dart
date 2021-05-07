@@ -9,18 +9,20 @@ import 'package:game_lists/model/status.dart';
 import 'package:game_lists/model/walkthrough.dart';
 import 'package:game_lists/pages/add_edit_pages/game_in_list_page.dart';
 
-class SearchGameCard extends StatelessWidget {
+class GameInSearchCard extends StatelessWidget {
   final String imageUrl;
   final String name;
+  final String? releaseDate;
   final List<String> platforms;
-  final String releaseDate;
+  final String? description;
   final VoidCallback onTap;
-  const SearchGameCard(
+  const GameInSearchCard(
       {Key? key,
       required this.imageUrl,
       required this.name,
-      required this.platforms,
       required this.releaseDate,
+      required this.platforms,
+      required this.description,
       required this.onTap})
       : super(key: key);
 
@@ -37,14 +39,12 @@ class SearchGameCard extends StatelessWidget {
             children: [
               Image.network(
                 imageUrl,
-                height: 128,
                 width: 96,
                 fit: BoxFit.fitHeight,
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
                 child: Container(
-                  height: 128,
                   width: MediaQuery.of(context).size.width - 136,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -53,20 +53,47 @@ class SearchGameCard extends StatelessWidget {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            name,
-                            style: TextStyle(fontSize: 20),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  releaseDate != null
+                                      ? '$name (${releaseDate!.substring(0, 4)})'
+                                      : name,
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      color: Colors.blue.shade100),
+                                ),
+                              ),
+                            ],
                           ),
-                          Text(
-                            platforms.join(', '),
-                            style: TextStyle(fontSize: 12),
+                          Visibility(
+                            visible: platforms.isNotEmpty,
+                            child: Column(
+                              children: [
+                                SizedBox(height: 4),
+                                Text(platforms.join(', '),
+                                    textAlign: TextAlign.justify,
+                                    style: TextStyle(fontSize: 12)),
+                              ],
+                            ),
                           ),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Text(releaseDate, style: TextStyle(fontSize: 14)),
+                          Visibility(
+                            visible: description != null,
+                            child: Column(
+                              children: [
+                                SizedBox(height: 4),
+                                Text(
+                                  description ?? '',
+                                  textAlign: TextAlign.justify,
+                                  style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.grey.shade300),
+                                ),
+                              ],
+                            ),
+                          ),
                         ],
                       ),
                     ],
@@ -124,11 +151,12 @@ class _SearchWidgetOptionState extends State<SearchWidgetOption> {
                         for (var platform in gameInSearch['platforms']) {
                           platforms.add(platform['abbreviation']);
                         }
-                        return SearchGameCard(
+                        return GameInSearchCard(
                           imageUrl: gameInSearch['imageUrl'],
                           name: gameInSearch['name'],
+                          releaseDate: gameInSearch['releaseDate'],
                           platforms: platforms,
-                          releaseDate: gameInSearch['releaseDate'] ?? '',
+                          description: gameInSearch['description'],
                           onTap: () async {
                             var data = <String, dynamic>{};
                             await Dio()
@@ -140,20 +168,25 @@ class _SearchWidgetOptionState extends State<SearchWidgetOption> {
                               print(e);
                             });
                             var game = Game(
-                              data['id'],
-                              DateTime.parse(data['dateLastUpdated']),
-                              data['name'],
-                              data['imageUrl'],
-                              data['description'],
-                              DateTime.parse(data['releaseDate']),
-                              await saveDevelopers(data['developers']),
-                              await saveFranchises(data['franchises']),
-                              await saveGenres(data['genres']),
-                              await savePlatforms(data['platforms']),
-                              0,
-                              '',
-                              Status.playing,
-                              [Walkthrough(startDate: DateTime.now())],
+                              giantBombId: data['id'],
+                              dateLastUpdated:
+                                  DateTime.parse(data['dateLastUpdated']),
+                              name: data['name'],
+                              image: await getImageFromUrl(data['imageUrl']),
+                              description: data['description'],
+                              releaseDate: DateTime.parse(data['releaseDate']),
+                              developers:
+                                  await saveDevelopers(data['developers']),
+                              franchises:
+                                  await saveFranchises(data['franchises']),
+                              genres: await saveGenres(data['genres']),
+                              platforms: await savePlatforms(data['platforms']),
+                              rating: 0,
+                              notes: '',
+                              status: Status.playing,
+                              walkthroughs: [
+                                Walkthrough(startDate: DateTime.now())
+                              ],
                             );
                             Navigator.pushNamed(
                               context,

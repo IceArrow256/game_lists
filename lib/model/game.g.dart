@@ -17,54 +17,59 @@ class GameAdapter extends TypeAdapter<Game> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return Game(
-      fields[0] as int,
-      fields[1] as DateTime,
-      fields[2] as String,
-      fields[3] as String,
-      fields[4] as String?,
-      fields[5] as DateTime?,
-      (fields[6] as List).cast<Developer>(),
-      (fields[7] as List).cast<Franchise>(),
-      (fields[8] as List).cast<Genre>(),
-      (fields[9] as List).cast<Platform>(),
-      fields[10] as int,
-      fields[11] as String,
-      fields[12] as Status,
-      (fields[13] as List).cast<Walkthrough>(),
-    );
+      giantBombId: fields[0] as int?,
+      steamId: fields[1] as int?,
+      dateLastUpdated: fields[3] as DateTime,
+      name: fields[4] as String,
+      image: fields[5] as Uint8List?,
+      description: fields[6] as String?,
+      releaseDate: fields[7] as DateTime?,
+      developers: (fields[8] as List).cast<Developer>(),
+      franchises: (fields[9] as List).cast<Franchise>(),
+      genres: (fields[10] as List).cast<Genre>(),
+      platforms: (fields[11] as List).cast<Platform>(),
+      rating: fields[12] as int,
+      notes: fields[13] as String,
+      status: fields[14] as Status,
+      walkthroughs: (fields[15] as List).cast<Walkthrough>(),
+    )..dateAdded = fields[2] as DateTime;
   }
 
   @override
   void write(BinaryWriter writer, Game obj) {
     writer
-      ..writeByte(14)
+      ..writeByte(16)
       ..writeByte(0)
       ..write(obj.giantBombId)
       ..writeByte(1)
-      ..write(obj.dateLastUpdated)
+      ..write(obj.steamId)
       ..writeByte(2)
-      ..write(obj.name)
+      ..write(obj.dateAdded)
       ..writeByte(3)
-      ..write(obj.imageUrl)
+      ..write(obj.dateLastUpdated)
       ..writeByte(4)
-      ..write(obj.description)
+      ..write(obj.name)
       ..writeByte(5)
-      ..write(obj.releaseDate)
+      ..write(obj.image)
       ..writeByte(6)
-      ..write(obj.developers)
+      ..write(obj.description)
       ..writeByte(7)
-      ..write(obj.franchises)
+      ..write(obj.releaseDate)
       ..writeByte(8)
-      ..write(obj.genres)
+      ..write(obj.developers)
       ..writeByte(9)
-      ..write(obj.platforms)
+      ..write(obj.franchises)
       ..writeByte(10)
-      ..write(obj.rating)
+      ..write(obj.genres)
       ..writeByte(11)
-      ..write(obj.notes)
+      ..write(obj.platforms)
       ..writeByte(12)
-      ..write(obj.status)
+      ..write(obj.rating)
       ..writeByte(13)
+      ..write(obj.notes)
+      ..writeByte(14)
+      ..write(obj.status)
+      ..writeByte(15)
       ..write(obj.walkthroughs);
   }
 

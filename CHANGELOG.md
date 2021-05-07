@@ -1,4 +1,12 @@
-## [1.13.0] - 2020-05-05
+## [1.14.0] - 2020-05-07
+### Add
+- Sorting for Games in Lists.
+### Changed
+- Style of Game Card for Search Tab and Game Tab.
+- Add Steam Id and Added date for Game Entity.
+- Images store as data instead of url. 
+
+## [1.13.0] - 2020-05-06
 ### Add
 - Optimize Game In List Page.
 - Game In List Page use Game entity instead request result.

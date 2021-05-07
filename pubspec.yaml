@@ -1,6 +1,6 @@
 name: game_lists
 description: The app for tracking what you're playing.
-version: 1.13.0
+version: 1.14.0
 environment:
   sdk: '>=2.12.0 <3.0.0'
 dependencies:

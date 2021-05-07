@@ -17,7 +17,7 @@ class FranchiseAdapter extends TypeAdapter<Franchise> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return Franchise(
-      fields[0] as int,
+      fields[0] as int?,
       fields[1] as String,
     );
   }

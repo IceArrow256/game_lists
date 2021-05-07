@@ -35,7 +35,8 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
             Tab(text: 'Planning'),
             Tab(text: 'Completed'),
             Tab(text: 'Pause'),
-            Tab(text: 'Dropped')
+            Tab(text: 'Dropped'),
+            Tab(text: 'All')
           ],
           iconData: Icons.games,
           widget: GamesWidgetOption(tabController: _gamesTabController)),
@@ -109,7 +110,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    _gamesTabController = TabController(vsync: this, length: 5);
+    _gamesTabController = TabController(vsync: this, length: 6);
     _statisticsTabController = TabController(vsync: this, length: 2);
   }
 

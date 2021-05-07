@@ -26,7 +26,7 @@ Future<List<Franchise>> saveFranchises(rawFranchises) async {
 @HiveType(typeId: 2)
 class Franchise extends HiveObject {
   @HiveField(0)
-  int giantBombId;
+  int? giantBombId;
   @HiveField(1)
   String name;
   Franchise(this.giantBombId, this.name);

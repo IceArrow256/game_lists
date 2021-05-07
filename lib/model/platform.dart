@@ -27,7 +27,7 @@ Future<List<Platform>> savePlatforms(rawPlatforms) async {
 @HiveType(typeId: 4)
 class Platform extends HiveObject {
   @HiveField(0)
-  int giantBombId;
+  int? giantBombId;
   @HiveField(1)
   String name;
   @HiveField(2)

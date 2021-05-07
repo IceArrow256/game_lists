@@ -7,7 +7,7 @@ import 'package:intl/intl.dart';
 
 class GameInListCard extends StatelessWidget {
   final Game game;
-  const GameInListCard({
+  GameInListCard({
     Key? key,
     required this.game,
   }) : super(key: key);
@@ -26,16 +26,14 @@ class GameInListCard extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Image.network(
-                game.imageUrl,
-                height: 128,
+              Image.memory(
+                game.image!,
                 width: 96,
                 fit: BoxFit.fitHeight,
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
                 child: Container(
-                  height: 128,
                   width: MediaQuery.of(context).size.width - 136,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -44,37 +42,57 @@ class GameInListCard extends StatelessWidget {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            game.name,
-                            style: TextStyle(fontSize: 20),
-                          ),
-                          Text(
-                            game.platforms
-                                .map((e) => e.abbreviation)
-                                .toList()
-                                .join(', '),
-                            style: TextStyle(fontSize: 12),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
                           Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Icon(
-                                Icons.star_outline,
-                                size: 16,
+                              Expanded(
+                                child: Text(
+                                  game.name,
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      color: Colors.blue.shade100),
+                                ),
                               ),
-                              Text('${game.rating}'),
+                              Visibility(
+                                  visible: game.rating != 0,
+                                  child: Column(
+                                    children: [
+                                      SizedBox(height: 4),
+                                      Row(
+                                        children: [
+                                          Icon(
+                                            Icons.star_outline,
+                                            size: 16,
+                                            color: Colors.yellow,
+                                          ),
+                                          Text('${game.rating}'),
+                                        ],
+                                      ),
+                                    ],
+                                  ))
                             ],
                           ),
+                          Visibility(
+                            visible: game.platforms.isNotEmpty,
+                            child: Column(
+                              children: [
+                                SizedBox(height: 4),
+                                Text(
+                                    game.platforms
+                                        .map((e) => e.abbreviation)
+                                        .toList()
+                                        .join(', '),
+                                    textAlign: TextAlign.justify,
+                                    style: TextStyle(fontSize: 12)),
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: 4),
                           Text(
                             game.releaseDate != null
-                                ? DateFormat('yyyy-MM-dd')
-                                    .format(game.releaseDate!)
+                                ? 'Release Date: ${DateFormat('yyyy-MM-dd').format(game.releaseDate!)}'
                                 : '',
-                            style: TextStyle(fontSize: 14),
+                            style: TextStyle(fontSize: 12),
                           ),
                         ],
                       ),
@@ -91,11 +109,15 @@ class GameInListCard extends StatelessWidget {
 }
 
 class GamesInListWidget extends StatefulWidget {
-  final Status status;
+  final Status? status;
+  final Sort sort;
+  final Order order;
 
-  const GamesInListWidget({
+  GamesInListWidget({
     Key? key,
-    required this.status,
+    this.status,
+    required this.sort,
+    required this.order,
   }) : super(key: key);
 
   @override
@@ -111,8 +133,29 @@ class GamesWidgetOption extends StatefulWidget {
   _GamesWidgetOptionState createState() => _GamesWidgetOptionState();
 }
 
+class GameWalkthrough {
+  final Game game;
+
+  final DateTime walkthrough;
+  const GameWalkthrough(this.game, this.walkthrough);
+}
+
+enum Order {
+  asc,
+  desk,
+}
+
+enum Sort {
+  gameName,
+  gameDateAdded,
+  gameWalkthroughsEndDate,
+  gameWalkthroughsStartDate,
+}
+
 class _GamesInListWidgetState extends State<GamesInListWidget> {
   final DateFormat _formatter = DateFormat('yyyy-MM-dd');
+  Sort? _currentSort;
+  Order? _currentOrder;
 
   @override
   Widget build(BuildContext context) {
@@ -120,12 +163,12 @@ class _GamesInListWidgetState extends State<GamesInListWidget> {
       future: getGamesInList(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          var data = snapshot.data!;
+          var games = sortGame(snapshot.data!);
           return ListView.builder(
             padding: EdgeInsets.symmetric(vertical: 4),
-            itemCount: data.length,
+            itemCount: games.length,
             itemBuilder: (context, index) {
-              var gameInList = data.elementAt(index);
+              var gameInList = games.elementAt(index);
               return GameInListCard(
                 game: gameInList,
               );
@@ -139,9 +182,74 @@ class _GamesInListWidgetState extends State<GamesInListWidget> {
 
   Future<List<Game>> getGamesInList() async {
     var gameInListBox = await Hive.openBox<Game>('game');
-    return gameInListBox.values
-        .where((element) => element.status == widget.status)
-        .toList();
+    if (widget.status != null) {
+      return gameInListBox.values
+          .where((element) => element.status == widget.status!)
+          .toList();
+    } else {
+      return gameInListBox.values.toList();
+    }
+  }
+
+  @override
+  void initState() {
+    _currentSort = widget.sort;
+    _currentOrder = widget.order;
+    super.initState();
+  }
+
+  List<Game> sortGame(List<Game> games) {
+    var order = _currentOrder == Order.asc ? 1 : -1;
+    var resultGames = <Game>[];
+    switch (_currentSort) {
+      case Sort.gameName:
+        games.sort((a, b) => order * a.name.compareTo(b.name));
+        resultGames = games;
+        break;
+      case Sort.gameName:
+        games.sort((a, b) => order * a.dateAdded.compareTo(b.dateAdded));
+        resultGames = games;
+        break;
+      case Sort.gameWalkthroughsStartDate:
+        var gameWalkthrough = <GameWalkthrough>[];
+        for (var game in games) {
+          for (var walkthrough in game.walkthroughs) {
+            gameWalkthrough.add(
+              GameWalkthrough(
+                game,
+                walkthrough.startDate ?? DateTime.fromMicrosecondsSinceEpoch(0),
+              ),
+            );
+          }
+        }
+        gameWalkthrough
+            .sort((a, b) => order * a.walkthrough.compareTo(b.walkthrough));
+        resultGames = gameWalkthrough.map((e) => e.game).toList();
+        break;
+      case Sort.gameWalkthroughsEndDate:
+        var gameWalkthrough = <GameWalkthrough>[];
+        for (var game in games) {
+          for (var walkthrough in game.walkthroughs) {
+            gameWalkthrough.add(
+              GameWalkthrough(
+                game,
+                walkthrough.endDate ?? DateTime.fromMicrosecondsSinceEpoch(0),
+              ),
+            );
+          }
+        }
+        gameWalkthrough
+            .sort((a, b) => order * a.walkthrough.compareTo(b.walkthrough));
+        resultGames = gameWalkthrough.map((e) => e.game).toList();
+        break;
+      case Sort.gameDateAdded:
+        games.sort((a, b) => order * a.dateAdded.compareTo(b.dateAdded));
+        resultGames = games;
+        break;
+      default:
+        resultGames = games;
+    }
+    return resultGames;
   }
 }
 
@@ -151,11 +259,34 @@ class _GamesWidgetOptionState extends State<GamesWidgetOption> {
     return TabBarView(
       controller: widget.tabController,
       children: [
-        GamesInListWidget(status: Status.playing),
-        GamesInListWidget(status: Status.planning),
-        GamesInListWidget(status: Status.completed),
-        GamesInListWidget(status: Status.pause),
-        GamesInListWidget(status: Status.dropped),
+        GamesInListWidget(
+          status: Status.playing,
+          sort: Sort.gameWalkthroughsStartDate,
+          order: Order.desk,
+        ),
+        GamesInListWidget(
+          status: Status.planning,
+          sort: Sort.gameDateAdded,
+          order: Order.desk,
+        ),
+        GamesInListWidget(
+            status: Status.completed,
+            sort: Sort.gameWalkthroughsEndDate,
+            order: Order.desk),
+        GamesInListWidget(
+          status: Status.pause,
+          sort: Sort.gameWalkthroughsStartDate,
+          order: Order.desk,
+        ),
+        GamesInListWidget(
+          status: Status.dropped,
+          sort: Sort.gameWalkthroughsStartDate,
+          order: Order.desk,
+        ),
+        GamesInListWidget(
+          sort: Sort.gameDateAdded,
+          order: Order.desk,
+        ),
       ],
     );
   }

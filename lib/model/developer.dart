@@ -31,7 +31,7 @@ Future<List<Developer>> saveDevelopers(rawDevelopers) async {
 @HiveType(typeId: 1)
 class Developer extends HiveObject {
   @HiveField(0)
-  int giantBombId;
+  int? giantBombId;
   @HiveField(1)
   DateTime dateLastUpdated;
   @HiveField(2)

@@ -17,7 +17,7 @@ class DeveloperAdapter extends TypeAdapter<Developer> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return Developer(
-      fields[0] as int,
+      fields[0] as int?,
       fields[1] as DateTime,
       fields[2] as String,
       fields[3] as String?,

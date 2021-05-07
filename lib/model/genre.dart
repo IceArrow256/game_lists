@@ -26,7 +26,7 @@ Future<List<Genre>> saveGenres(rawGenre) async {
 @HiveType(typeId: 3)
 class Genre extends HiveObject {
   @HiveField(0)
-  int giantBombId;
+  int? giantBombId;
   @HiveField(1)
   String name;
 

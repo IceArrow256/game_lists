@@ -58,49 +58,38 @@ class _GameInListPageState extends State<GameInListPage> {
         padding: const EdgeInsets.all(8.0),
         children: [
           Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Image.network(
-                game.imageUrl,
-                height: 160,
+              Image.memory(
+                game.image!,
                 width: 120,
                 fit: BoxFit.fitHeight,
               ),
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
-                  child: Container(
-                    height: 160,
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            game.name,
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w600,
-                            ),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          game.name,
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
                           ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Status:',
-                                style: TextStyle(fontWeight: FontWeight.w600),
-                              ),
-                              DropdownButton<StatusName>(
-                                  isExpanded: true,
-                                  value: _selectedStatus ?? _statuses.first,
-                                  onChanged: (value) =>
-                                      setState(() => _selectedStatus = value!),
-                                  items: _statuses
-                                      .map((e) => DropdownMenuItem(
-                                          value: e, child: Text(e.name)))
-                                      .toList())
-                            ],
-                          ),
-                        ]),
-                  ),
+                        ),
+                        SizedBox(height: 4),
+                        DropdownButton<StatusName>(
+                            isExpanded: true,
+                            value: _selectedStatus ?? _statuses.first,
+                            onChanged: (value) =>
+                                setState(() => _selectedStatus = value!),
+                            items: _statuses
+                                .map((e) => DropdownMenuItem(
+                                    value: e, child: Text(e.name)))
+                                .toList()),
+                      ]),
                 ),
               )
             ],
