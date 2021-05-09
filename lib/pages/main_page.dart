@@ -44,8 +44,8 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
         title: 'Statistics',
         tabController: _statisticsTabController,
         tabs: [
-          Tab(text: 'Player'),
-          Tab(text: 'Global'),
+          Tab(text: 'Main'),
+          Tab(text: 'By Score'),
         ],
         iconData: Icons.insert_chart,
         widget: StatisticsWidgetOption(tabController: _statisticsTabController),

@@ -1,3 +1,9 @@
+## [1.15.0] - 2020-05-08
+### Add
+- Statistics on Games Count By Game Status
+- Statistics on Completed Game Count By Release Year
+- Statistics on Completed Game Count By Finish Year
+  
 ## [1.14.0] - 2020-05-07
 ### Add
 - Sorting for Games in Lists.
