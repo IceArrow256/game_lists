@@ -28,7 +28,7 @@ class _GameListsState extends State<GameLists> {
     return MaterialApp(
       title: 'Game Lists',
       theme: ThemeData(
-          accentColor: Colors.red,
+          accentColor: Color(0xffbf616a),
           brightness: Brightness.dark,
           textButtonTheme: TextButtonThemeData(
             style: ButtonStyle(

@@ -1,3 +1,8 @@
+## [1.16.0] - 2020-05-10
+### Add
+- More statistic charts.
+- Chart template widgets for adding more chart.
+
 ## [1.15.0] - 2020-05-08
 ### Add
 - Statistics on Games Count By Game Status
