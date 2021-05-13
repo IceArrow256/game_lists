@@ -23,7 +23,7 @@ class ChartLegendElementWidget extends StatelessWidget {
 class PieChartCardData {
   final String title;
   final int value;
-  final Color color;
+  Color color;
   final bool isHide;
   PieChartCardData({
     required this.title,
@@ -52,7 +52,7 @@ class PieChartCardWidget extends StatelessWidget {
         child: PieChart(PieChartData(
           centerSpaceRadius: 0,
           sections: data
-              .where((element) => element.isHide != true)
+              .where((e) => e.isHide != true)
               .map((e) => PieChartSectionData(
                     title: e.value.toString(),
                     color: e.color,

@@ -167,8 +167,8 @@ class _GamesInListWidgetState extends State<GamesInListWidget> {
           return ListView.builder(
             padding: EdgeInsets.symmetric(vertical: 4),
             itemCount: games.length,
-            itemBuilder: (context, index) {
-              var gameInList = games.elementAt(index);
+            itemBuilder: (context, i) {
+              var gameInList = games.elementAt(i);
               return GameInListCard(
                 game: gameInList,
               );
@@ -184,7 +184,7 @@ class _GamesInListWidgetState extends State<GamesInListWidget> {
     var gameInListBox = await Hive.openBox<Game>('game');
     if (widget.status != null) {
       return gameInListBox.values
-          .where((element) => element.status == widget.status!)
+          .where((e) => e.status == widget.status!)
           .toList();
     } else {
       return gameInListBox.values.toList();

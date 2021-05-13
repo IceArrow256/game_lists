@@ -144,9 +144,9 @@ class _SearchWidgetOptionState extends State<SearchWidgetOption> {
                     return ListView.builder(
                       padding: EdgeInsets.symmetric(vertical: 4),
                       itemCount: data.length,
-                      itemBuilder: (context, index) {
+                      itemBuilder: (context, i) {
                         var gameInSearch =
-                            data.elementAt(index) as Map<String, dynamic>;
+                            data.elementAt(i) as Map<String, dynamic>;
                         List<String> platforms = [];
                         for (var platform in gameInSearch['platforms']) {
                           platforms.add(platform['abbreviation']);

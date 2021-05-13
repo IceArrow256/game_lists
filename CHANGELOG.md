@@ -1,3 +1,10 @@
+## [1.17.0] - 2020-05-13
+### Add
+- Complete stats.
+
+### Changed
+- Update screenshots.
+
 ## [1.16.0] - 2020-05-10
 ### Add
 - More statistic charts.

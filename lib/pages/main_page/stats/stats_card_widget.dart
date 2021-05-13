@@ -30,6 +30,7 @@ class StatElementWidget extends StatelessWidget {
               title,
               style: TextStyle(fontSize: 16),
               textAlign: TextAlign.center,
+              maxLines: 2,
             ),
           ],
         ),

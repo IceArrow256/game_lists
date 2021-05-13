@@ -114,9 +114,9 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
     _statisticsTabController = TabController(vsync: this, length: 2);
   }
 
-  void _onItemTapped(int index) {
+  void _onItemTapped(int i) {
     setState(() {
-      _selectedIndex = index;
+      _selectedIndex = i;
     });
   }
 }

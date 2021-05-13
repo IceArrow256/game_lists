@@ -43,8 +43,8 @@ class _SelectCompanyPageState extends State<SelectCompanyPage> {
             return ListView.builder(
               padding: EdgeInsets.all(8),
               itemCount: companies.length,
-              itemBuilder: (context, index) {
-                var company = companies.elementAt(index);
+              itemBuilder: (context, i) {
+                var company = companies.elementAt(i);
                 return CompanyCard(
                   company: company,
                   onEditPressed: () async {

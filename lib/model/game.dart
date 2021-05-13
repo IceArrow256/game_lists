@@ -12,6 +12,16 @@ import 'package:image/image.dart';
 
 part 'game.g.dart';
 
+void fixCountry(List<Game> games) async {
+  games.forEach((game) {
+    game.developers.forEach((developer) {
+      if (developer.country == 'USA') developer.country = 'United States';
+      if (developer.country == 'United States of America')
+        developer.country = 'United States';
+    });
+  });
+}
+
 Future<Uint8List> getImageFromUrl(String url) async {
   print(url);
   Uint8List rawImage = Uint8List.fromList(
