@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:game_lists/model/game.dart';
 import 'package:game_lists/model/status.dart';
 import 'package:game_lists/model/walkthrough.dart';
+import 'package:game_lists/pages/game_page.dart';
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 
@@ -53,46 +54,37 @@ class _GameInListPageState extends State<GameInListPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(game.name),
+        actions: [
+          IconButton(
+              icon: Icon(Icons.info),
+              onPressed: () async {
+                await Navigator.pushNamed(context, GamePage.routeName,
+                    arguments: game);
+              })
+        ],
       ),
       body: ListView(
         padding: const EdgeInsets.all(8.0),
         children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Image.memory(
-                game.image!,
-                width: 120,
-                fit: BoxFit.fitHeight,
-              ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(
-                          game.name,
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        SizedBox(height: 4),
-                        DropdownButton<StatusName>(
-                            isExpanded: true,
-                            value: _selectedStatus ?? _statuses.first,
-                            onChanged: (value) =>
-                                setState(() => _selectedStatus = value!),
-                            items: _statuses
-                                .map((e) => DropdownMenuItem(
-                                    value: e, child: Text(e.name)))
-                                .toList()),
-                      ]),
-                ),
-              )
-            ],
+          Image.memory(
+            game.image!,
+            height: 256,
+            // fit: BoxFit.none,
+            // cacheHeight: 256,
+          ),
+          Text(
+            'Status:',
+            style: TextStyle(fontWeight: FontWeight.w600),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+            child: DropdownButton<StatusName>(
+                isExpanded: true,
+                value: _selectedStatus ?? _statuses.first,
+                onChanged: (value) => setState(() => _selectedStatus = value!),
+                items: _statuses
+                    .map((e) => DropdownMenuItem(value: e, child: Text(e.name)))
+                    .toList()),
           ),
           SizedBox(height: 8),
           Text(
@@ -242,7 +234,7 @@ class _GameInListPageState extends State<GameInListPage> {
         _noteTextEditingController.text = game.notes;
         for (var walkthrough in game.walkthroughs) {
           walkthroughWidgets.add(WalkthroughWidget(
-            firstDate: game.releaseDate!,
+            firstDate: game.releaseDate ?? DateTime.now(),
             walkthrough: walkthrough,
           ));
         }

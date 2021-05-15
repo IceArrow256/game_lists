@@ -1,9 +1,16 @@
 ## [1.18.0] - 2020-05-15
+### Added
+- Sorting games by different fields.
+
 ### Changed
-- Update dependencies
+- Update dependencies.
 
 ### Removed
 - Unused and deprecated files and code.
+
+### Fixed
+- Usage section in README.md.
+- Game duplication in playing list.
 
 ## [1.17.0] - 2020-05-13
 ### Add

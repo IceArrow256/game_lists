@@ -7,7 +7,7 @@ The app for tracking what you're playing.
 2. Install [Flutter](https://flutter.dev/docs/get-started/install).
 3. Clone project:
 ~~~
-$ git clone https://github.com/boyan01/flutter-netease-music.git
+$ git clone https://github.com/IceArrow256/game_lists.git
 ~~~
 4. Build & run:
 ~~~

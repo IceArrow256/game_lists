@@ -27,19 +27,20 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
           iconData: Icons.search,
           widget: SearchWidgetOption()),
       WidgetOption(
-          title: 'Games',
-          tabController: _gamesTabController,
-          isTabScrollable: true,
-          tabs: [
-            Tab(text: 'Playing'),
-            Tab(text: 'Planning'),
-            Tab(text: 'Completed'),
-            Tab(text: 'Pause'),
-            Tab(text: 'Dropped'),
-            Tab(text: 'All')
-          ],
-          iconData: Icons.games,
-          widget: GamesWidgetOption(tabController: _gamesTabController)),
+        title: 'Games',
+        tabController: _gamesTabController,
+        isTabScrollable: true,
+        tabs: [
+          Tab(text: 'Playing'),
+          Tab(text: 'Planning'),
+          Tab(text: 'Completed'),
+          Tab(text: 'Pause'),
+          Tab(text: 'Dropped'),
+          Tab(text: 'All')
+        ],
+        iconData: Icons.games,
+        widget: GamesWidgetOption(tabController: _gamesTabController),
+      ),
       WidgetOption(
         title: 'Statistics',
         tabController: _statisticsTabController,

@@ -16,6 +16,8 @@ void fixCountry(List<Game> games) async {
   games.forEach((game) {
     game.developers.forEach((developer) {
       if (developer.country == 'USA') developer.country = 'United States';
+      if (developer.country == 'U.S.A') developer.country = 'United States';
+      if (developer.country == 'P.R.C.') developer.country = 'China';
       if (developer.country == 'United States of America')
         developer.country = 'United States';
     });
@@ -28,8 +30,8 @@ Future<Uint8List> getImageFromUrl(String url) async {
       (await Dio().get(url, options: Options(responseType: ResponseType.bytes)))
           .data);
   var image = decodeImage(rawImage)!;
-  if (image.width > 240) {
-    var finalW = 240;
+  if (image.width > 1024) {
+    var finalW = 1024;
     var finalH = ((finalW * image.height) / image.width).round();
     image = copyResize(image,
         width: finalW, height: finalH, interpolation: Interpolation.linear);

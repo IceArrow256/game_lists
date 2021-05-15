@@ -7,7 +7,8 @@ import 'package:game_lists/model/genre.dart';
 import 'package:game_lists/model/platform.dart';
 import 'package:game_lists/model/status.dart';
 import 'package:game_lists/model/walkthrough.dart';
-import 'package:game_lists/pages/add_edit_pages/game_in_list_page.dart';
+import 'package:game_lists/pages/game_in_list_page.dart';
+import 'package:hive/hive.dart';
 
 class GameInSearchCard extends StatelessWidget {
   final String imageUrl;
@@ -167,27 +168,55 @@ class _SearchWidgetOptionState extends State<SearchWidgetOption> {
                                 .catchError((e) {
                               print(e);
                             });
-                            var game = Game(
-                              giantBombId: data['id'],
-                              dateLastUpdated:
-                                  DateTime.parse(data['dateLastUpdated']),
-                              name: data['name'],
-                              image: await getImageFromUrl(data['imageUrl']),
-                              description: data['description'],
-                              releaseDate: DateTime.parse(data['releaseDate']),
-                              developers:
-                                  await saveDevelopers(data['developers']),
-                              franchises:
-                                  await saveFranchises(data['franchises']),
-                              genres: await saveGenres(data['genres']),
-                              platforms: await savePlatforms(data['platforms']),
-                              rating: 0,
-                              notes: '',
-                              status: Status.playing,
-                              walkthroughs: [
-                                Walkthrough(startDate: DateTime.now())
-                              ],
-                            );
+                            var gameBox = await Hive.openBox<Game>('game');
+                            var games = gameBox.values
+                                .where((element) =>
+                                    element.giantBombId == data['id'])
+                                .toList();
+                            Game? game;
+                            if (games.isEmpty) {
+                              game = Game(
+                                giantBombId: data['id'],
+                                dateLastUpdated:
+                                    DateTime.parse(data['dateLastUpdated']),
+                                name: data['name'],
+                                image: await getImageFromUrl(data['imageUrl']),
+                                description: data['description'],
+                                releaseDate: data['releaseDate'] != null
+                                    ? DateTime.parse(data['releaseDate'])
+                                    : null,
+                                developers:
+                                    await saveDevelopers(data['developers']),
+                                franchises:
+                                    await saveFranchises(data['franchises']),
+                                genres: await saveGenres(data['genres']),
+                                platforms:
+                                    await savePlatforms(data['platforms']),
+                                rating: 0,
+                                notes: '',
+                                status: Status.playing,
+                                walkthroughs: [
+                                  Walkthrough(startDate: DateTime.now())
+                                ],
+                              );
+                            } else {
+                              game = games.first;
+                              game.dateLastUpdated =
+                                  DateTime.parse(data['dateLastUpdated']);
+                              game.name = data['name'];
+                              game.image =
+                                  await getImageFromUrl(data['imageUrl']);
+                              game.description = data['description'];
+                              game.releaseDate =
+                                  DateTime.parse(data['releaseDate']);
+                              game.developers =
+                                  await saveDevelopers(data['developers']);
+                              game.franchises =
+                                  await saveFranchises(data['franchises']);
+                              game.genres = await saveGenres(data['genres']);
+                              game.platforms =
+                                  await savePlatforms(data['platforms']);
+                            }
                             Navigator.pushNamed(
                               context,
                               GameInListPage.routeName,

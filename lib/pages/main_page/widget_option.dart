@@ -15,7 +15,8 @@ class WidgetOption {
     this.floatingActionButton,
     required IconData iconData,
     required this.widget,
-  })   : appBar = AppBar(
+    List<Widget>? actions,
+  })  : appBar = AppBar(
           elevation: 0,
           title: Text(title),
           bottom: tabs != null
@@ -24,6 +25,7 @@ class WidgetOption {
                   isScrollable: isTabScrollable ?? false,
                   tabs: tabs)
               : null,
+          actions: actions ?? [],
         ),
         bottomNavigationBarItem = BottomNavigationBarItem(
           icon: Icon(iconData),

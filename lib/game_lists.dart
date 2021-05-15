@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:game_lists/pages/about_page.dart';
-import 'package:game_lists/pages/add_edit_pages/game_in_list_page.dart';
-import 'package:game_lists/pages/add_edit_pages/game_page.dart';
+import 'package:game_lists/pages/game_in_list_page.dart';
+import 'package:game_lists/pages/game_page.dart';
 import 'package:game_lists/pages/main_page.dart';
+import 'package:game_lists/pages/select_sort_page.dart';
 import 'package:game_lists/pages/settings_page.dart';
 
 class GameLists extends StatefulWidget {
@@ -33,9 +34,10 @@ class _GameListsState extends State<GameLists> {
         '/about': (context) => AboutPage(),
         '/settings': (context) => SettingsPage(),
         // Add Edit Page
-        '/game': (context) => GamePage(),
+        GamePage.routeName: (context) => GamePage(),
         GameInListPage.routeName: (context) => GameInListPage(),
         // Select Pages
+        SelectSortPage.routeName: (context) => SelectSortPage(),
       },
       debugShowCheckedModeBanner: false,
     );
