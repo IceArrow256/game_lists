@@ -1,3 +1,10 @@
+## [1.18.0] - 2020-05-15
+### Changed
+- Update dependencies
+
+### Removed
+- Unused and deprecated files and code.
+
 ## [1.17.0] - 2020-05-13
 ### Add
 - Complete stats.

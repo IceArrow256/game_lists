@@ -1,18 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:game_lists/pages/about_page.dart';
-import 'package:game_lists/pages/add_edit_pages/company_page.dart';
-import 'package:game_lists/pages/add_edit_pages/country_page.dart';
 import 'package:game_lists/pages/add_edit_pages/game_in_list_page.dart';
 import 'package:game_lists/pages/add_edit_pages/game_page.dart';
-import 'package:game_lists/pages/add_edit_pages/platform_page.dart';
-import 'package:game_lists/pages/add_edit_pages/series_page.dart';
-import 'package:game_lists/pages/add_edit_pages/tag_page.dart';
 import 'package:game_lists/pages/main_page.dart';
-import 'package:game_lists/pages/select_pages/select_company_page.dart';
-import 'package:game_lists/pages/select_pages/select_platform_page.dart';
-import 'package:game_lists/pages/select_pages/select_series_page.dart';
-import 'package:game_lists/pages/select_pages/select_tag_page.dart';
 import 'package:game_lists/pages/settings_page.dart';
 
 class GameLists extends StatefulWidget {
@@ -42,18 +33,9 @@ class _GameListsState extends State<GameLists> {
         '/about': (context) => AboutPage(),
         '/settings': (context) => SettingsPage(),
         // Add Edit Page
-        '/country': (context) => CountryPage(),
         '/game': (context) => GamePage(),
-        '/platform': (context) => PlatformPage(),
-        '/series': (context) => SeriesPage(),
-        '/tag': (context) => TagPage(),
-        CompanyPage.routeName: (context) => CompanyPage(),
         GameInListPage.routeName: (context) => GameInListPage(),
         // Select Pages
-        SelectCompanyPage.routeName: (context) => SelectCompanyPage(),
-        '/select_platform': (context) => SelectPlatformPage(),
-        '/select_series': (context) => SelectSeriesPage(),
-        '/select_tag': (context) => SelectTagPage(),
       },
       debugShowCheckedModeBanner: false,
     );

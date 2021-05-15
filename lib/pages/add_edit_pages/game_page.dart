@@ -1,7 +1,6 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:game_lists/pages/select_pages/select_company_page.dart';
 import 'package:image/image.dart' as Img;
 import 'package:image_picker/image_picker.dart';
 
@@ -86,9 +85,7 @@ class _GamePageState extends State<GamePage> {
                 labelText: 'Developer',
               ),
               initialValue: 'cavia inc., Toylogic',
-              onTap: () {
-                Navigator.pushNamed(context, SelectCompanyPage.routeName);
-              },
+              onTap: () {},
               readOnly: true,
             ),
             TextFormField(
