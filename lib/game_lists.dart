@@ -5,7 +5,6 @@ import 'package:game_lists/pages/game_in_list_page.dart';
 import 'package:game_lists/pages/game_page.dart';
 import 'package:game_lists/pages/main_page.dart';
 import 'package:game_lists/pages/select_sort_page.dart';
-import 'package:game_lists/pages/settings_page.dart';
 
 class GameLists extends StatefulWidget {
   const GameLists({Key? key}) : super(key: key);
@@ -32,7 +31,6 @@ class _GameListsState extends State<GameLists> {
         // Main page
         '/': (context) => MainPage(),
         '/about': (context) => AboutPage(),
-        '/settings': (context) => SettingsPage(),
         // Add Edit Page
         GamePage.routeName: (context) => GamePage(),
         GameInListPage.routeName: (context) => GameInListPage(),

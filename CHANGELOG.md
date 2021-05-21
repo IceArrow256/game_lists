@@ -1,3 +1,10 @@
+## [1.18.1] - 2020-05-21
+### Removed
+- Settings page.
+
+### Added
+- Minor improvement.
+
 ## [1.18.0] - 2020-05-15
 ### Added
 - Sorting games by different fields.
