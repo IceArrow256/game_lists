@@ -82,12 +82,6 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
               ),
             ),
             ListTile(
-              title: Text('Settings'),
-              onTap: () {
-                Navigator.pushNamed(context, '/settings');
-              },
-            ),
-            ListTile(
               title: Text('About'),
               onTap: () {
                 Navigator.pushNamed(context, '/about');

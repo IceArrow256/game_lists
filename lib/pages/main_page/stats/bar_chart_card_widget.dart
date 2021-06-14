@@ -13,6 +13,7 @@ class BarChartCardData {
   });
 }
 
+
 class BarChartCardWidget extends StatelessWidget {
   final String title;
   final List<BarChartCardData> data;

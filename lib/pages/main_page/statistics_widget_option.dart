@@ -129,17 +129,19 @@ List<PieChartCardData> generateGamesByGameStatus(Box<Game> gameBox) {
   return data;
 }
 
-List<StatElementWidget> generateMainStats(Box<Game> gameBox) {
-  var games = gameBox.values
-      .where((e) => e.status == Status.completed || e.status == Status.playing)
-      .toList();
+List<StatElementWidget> generateMainStats(Box<Game> gameBox, List<Game> games) {
   var gamesWithScore = gameBox.values.where((e) => e.rating != 0);
-  var meanRating = gamesWithScore.map((e) => e.rating).reduce((a, b) => a + b) /
-      gamesWithScore.length;
-  var deviations =
-      gamesWithScore.map((e) => pow(e.rating - meanRating, 2)).toList();
-  var standardDeviation =
-      deviations.reduce((a, b) => a + b) / gamesWithScore.length;
+  var meanRating = 0.0;
+  var standardDeviation = 0.0;
+  if (gamesWithScore.isNotEmpty) {
+    meanRating = gamesWithScore.map((e) => e.rating).reduce((a, b) =>
+    a + b) /
+        gamesWithScore.length;
+    var deviations =
+    gamesWithScore.map((e) => pow(e.rating - meanRating, 2)).toList();
+    standardDeviation =
+        deviations.reduce((a, b) => a + b) / gamesWithScore.length;
+  }
   var mainStats = <StatElementWidget>[];
   mainStats.add(
     StatElementWidget(
@@ -182,7 +184,7 @@ Future<Stats> generateStats() async {
   var genres = genreBox.values.toList()
     ..sort((a, b) => a.name.compareTo(b.name));
   return Stats(
-      mainStats: generateMainStats(gameBox),
+      mainStats: generateMainStats(gameBox, games),
       gameByGameStatus: generateGamesByGameStatus(gameBox),
       completedGamesByReleaseYear:
           generateCompletedGamesByReleaseYear(completedGames),
@@ -343,16 +345,16 @@ class _StatisticsWidgetOptionState extends State<StatisticsWidgetOption> {
                     data: stats.completedGamesByReleaseYear,
                     color: Color(0xffbf616a),
                   ),
-                  BarChartCardWidget(
+                  stats.completedGamesByCompleteYear.isNotEmpty ? BarChartCardWidget(
                     title: 'Number of Games Completed by Year of Complete',
                     data: stats.completedGamesByCompleteYear,
                     color: Color(0xffd08770),
-                  ),
-                  BarChartCardWidget(
+                  ): Container(),
+                  stats.completedGamesByRating.isNotEmpty ? BarChartCardWidget(
                     title: 'Number of Games Completed by Rating',
                     data: stats.completedGamesByRating,
                     color: Color(0xffebcb8b),
-                  ),
+                  ): Container(),
                 ],
               ),
               ListView(

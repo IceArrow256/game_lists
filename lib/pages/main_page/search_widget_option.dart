@@ -159,10 +159,11 @@ class _SearchWidgetOptionState extends State<SearchWidgetOption> {
                           platforms: platforms,
                           description: gameInSearch['description'],
                           onTap: () async {
+                            var hostBox = await Hive.openBox<String>('host');
                             var data = <String, dynamic>{};
                             await Dio()
                                 .get(
-                                  'http://192.168.0.2:8000/game/${gameInSearch['id']}',
+                                  'http://${hostBox.get('host')}:8000/game/${gameInSearch['id']}',
                                 )
                                 .then((value) => data = value.data)
                                 .catchError((e) {
@@ -238,10 +239,12 @@ class _SearchWidgetOptionState extends State<SearchWidgetOption> {
   }
 
   Future<List<dynamic>> search({required String query}) async {
+    var hostBox = await Hive.openBox<String>('host');
     var data = [];
+    print('http://${hostBox.get('host')}/search');
     await Dio()
         .get(
-          'http://192.168.0.2:8000/search',
+          'http://${hostBox.get('host')}:8000/search',
           queryParameters: {'query': query},
         )
         .then((value) => data = value.data)
